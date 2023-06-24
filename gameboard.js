@@ -1,3 +1,5 @@
+import ShipFactory from './ship';
+
 const Gameboard = () => {
   const locationProperties = {
     shipPresent: false,
@@ -44,9 +46,10 @@ const Gameboard = () => {
     // TODO: check if there is no ship present
     // TODO: check if there is no ship adjacent
 
+    const ship = ShipFactory(name, length);
     array.forEach(([row, column]) => {
       board[row][column].shipPresent = true;
-      board[row][column].shipID = name;
+      board[row][column].shipID = ship;
     });
   };
 
