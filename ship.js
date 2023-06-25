@@ -1,4 +1,7 @@
-const ShipFactory = (length) => {
+const ShipFactory = (name, length) => {
+  const getName = () => name;
+  const getLength = () => length;
+
   // Hits
   let hits = 0;
   const hit = () => {
@@ -7,7 +10,7 @@ const ShipFactory = (length) => {
 
   const isSunk = () => hits >= length;
 
-  return { hit, isSunk };
+  return { hit, isSunk, getName, getLength };
 };
 
 export default ShipFactory;
