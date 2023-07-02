@@ -75,12 +75,42 @@ describe('Attacking', () => {
   });
 });
 
-describe('Board state', () => {
-  test('Report all ships sunk', () => {
+describe('allShipsSunk()', () => {
+  test('Should report false if none of the ships are sunk', () => {
+    /**
+     * NOTE: I've asked around and searched high and low for a test that doesn't
+     * use the other methods that aren't part of the test itself. But because
+     * allShipsSunk() is a method of the Gameboard object, and isSunk()'s logic
+     * and the hit count are both encapsulated, I can't find a way to decouple
+     * the receiveAttack() and placeShip() methods from the test, or to mock the
+     * return value for isSunk().
+     */
+    const board1 = Gameboard();
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.placeShip(0, 0, 'Test ship 1', 1, 'vertical');
+    board1.placeShip(2, 2, 'Test ship 2', 2, 'vertical');
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.receiveAttack(2, 2);
+    expect(board1.allShipsSunk()).toBe(false);
+  });
+
+  test('Should return false if only some ships are sunk', () => {
     const board1 = Gameboard();
     expect(board1.allShipsSunk()).toBe(false);
     board1.placeShip(0, 0, 'poor ship', 1, 'vertical');
     board1.placeShip(2, 2, 'poor ship', 2, 'vertical');
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.receiveAttack(2, 2);
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.receiveAttack(3, 2);
+    expect(board1.allShipsSunk()).toBe(false);
+  });
+
+  test('Should return true if all ships are sunk', () => {
+    const board1 = Gameboard();
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.placeShip(0, 0, 'Test ship 1', 1, 'vertical');
+    board1.placeShip(2, 2, 'Test ship 2', 2, 'vertical');
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(0, 0);
     expect(board1.allShipsSunk()).toBe(false);
