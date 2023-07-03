@@ -53,7 +53,7 @@ const Gameboard = () => {
     if (
       shipArray.some(
         ([row, column]) =>
-          !board?.[row]?.[column] || board[row][column].shipPresent,
+          !board[row]?.[column] || board[row][column].shipPresent,
       )
     )
       return false;
