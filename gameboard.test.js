@@ -34,6 +34,29 @@ describe('Placing ships', () => {
     board1.placeShip(2, 3, 'battleship', 4, 'vertical');
     expect(board1.getBoard()[2][3].shipID).toBe(board1.getBoard()[3][3].shipID);
   });
+
+  test('Returns false when ship with length 1 is already present', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'Test ship', 1, 'horizontal')).toBe(true);
+    expect(testBoard.placeShip(0, 0, 'Test ship', 1, 'horizontal')).toBe(false);
+  });
+
+  test('Returns false when ship with length 3 overlaps', () => {
+    const testBoard = Gameboard();
+    testBoard.placeShip(0, 0, 'Test ship', 3, 'horizontal');
+    expect(testBoard.placeShip(0, 1, 'Overlap vertically', 2, 'vertical')).toBe(
+      false,
+    );
+    expect(testBoard.placeShip(0, 2, 'Overlap vertically', 2, 'vertical')).toBe(
+      false,
+    );
+    expect(testBoard.placeShip(0, 0, 'Overlap vertically', 2, 'vertical')).toBe(
+      false,
+    );
+    expect(
+      testBoard.placeShip(0, 4, 'Adjacent, not overlapping', 2, 'vertical'),
+    ).toBe(true);
+  });
 });
 
 describe('Attacking', () => {

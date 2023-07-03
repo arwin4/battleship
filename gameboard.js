@@ -50,10 +50,12 @@ const Gameboard = () => {
     // The following TODOs should be checked when the UI placing functionality
     // is determined:
     // TODO: check if ship fits on board completely
-    // TODO: check if there is no ship present
-    // TODO: check if there is no ship adjacent
 
     const ship = ShipFactory(name, length);
+
+    // Reject placement if any location is occupied
+    if (array.some(([row, column]) => board[row][column].shipPresent))
+      return false;
 
     // Add a reference to the ship to the board in each location it occupies
     array.forEach(([row, column]) => {
@@ -62,6 +64,7 @@ const Gameboard = () => {
     });
 
     ships.push(ship);
+    return true;
   };
 
   const receiveAttack = (row, column) => {
