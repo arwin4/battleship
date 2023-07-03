@@ -46,7 +46,7 @@ const Gameboard = () => {
   };
 
   const placeShip = (startRow, startColumn, name, length, direction) => {
-    const array = getShipArray(startRow, startColumn, length, direction);
+    const shipArray = getShipArray(startRow, startColumn, length, direction);
     // The following TODOs should be checked when the UI placing functionality
     // is determined:
     // TODO: check if ship fits on board completely
@@ -54,16 +54,16 @@ const Gameboard = () => {
     const ship = ShipFactory(name, length);
 
     // Reject placement if any location is occupied
-    if (array.some(([row, column]) => board[row][column].shipPresent))
+    if (shipArray.some(([row, column]) => board[row][column].shipPresent))
       return false;
 
     // Add a reference to the ship to the board in each location it occupies
-    array.forEach(([row, column]) => {
+    shipArray.forEach(([row, column]) => {
       board[row][column].shipPresent = true;
       board[row][column].shipID = ship;
     });
 
-    ships.push(ship);
+    shipArray.push(ship);
     return true;
   };
 
