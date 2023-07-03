@@ -57,6 +57,20 @@ describe('Placing ships', () => {
       testBoard.placeShip(0, 4, 'Adjacent, not overlapping', 2, 'vertical'),
     ).toBe(true);
   });
+
+  test('Returns false when ship is placed out of column bounds', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, -1, 'Test ship', 3, 'horizontal')).toBe(
+      false,
+    );
+    expect(testBoard.placeShip(5, 9, 'Test ship', 3, 'horizontal')).toBe(false);
+  });
+});
+
+test('Returns false when ship is placed out of row bounds', () => {
+  const testBoard = Gameboard();
+  expect(testBoard.placeShip(-1, 0, 'Test ship', 3, 'horizontal')).toBe(false);
+  expect(testBoard.placeShip(9, 0, 'Test ship', 3, 'vertical')).toBe(false);
 });
 
 describe('Attacking', () => {
