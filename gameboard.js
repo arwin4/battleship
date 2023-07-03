@@ -63,7 +63,7 @@ const Gameboard = () => {
       board[row][column].shipID = ship;
     });
 
-    shipArray.push(ship);
+    ships.push(ship);
     return true;
   };
 
