@@ -65,12 +65,13 @@ describe('Placing ships', () => {
     );
     expect(testBoard.placeShip(5, 9, 'Test ship', 3, 'horizontal')).toBe(false);
   });
-});
-
-test('Returns false when ship is placed out of row bounds', () => {
-  const testBoard = Gameboard();
-  expect(testBoard.placeShip(-1, 0, 'Test ship', 3, 'horizontal')).toBe(false);
-  expect(testBoard.placeShip(9, 0, 'Test ship', 3, 'vertical')).toBe(false);
+  test('Returns false when ship is placed out of row bounds', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(-1, 0, 'Test ship', 3, 'horizontal')).toBe(
+      false,
+    );
+    expect(testBoard.placeShip(9, 0, 'Test ship', 3, 'vertical')).toBe(false);
+  });
 });
 
 describe('Attacking', () => {
