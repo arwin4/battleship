@@ -9,5 +9,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  rules: {},
+  rules: {
+    'import/extensions': [0], // Allow importing files with the ".js" extension
+  },
 };

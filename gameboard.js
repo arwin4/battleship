@@ -1,4 +1,4 @@
-import ShipFactory from './ship';
+import ShipFactory from './ship.js';
 
 const Gameboard = () => {
   /**
