@@ -72,7 +72,7 @@ const Gameboard = () => {
     const attackedLocation = board[row][column];
 
     // Ignore multiple attacks on same location
-    if (attackedLocation.wasAttacked) return;
+    if (attackedLocation.wasAttacked) return false;
 
     attackedLocation.wasAttacked = true;
 
@@ -81,6 +81,7 @@ const Gameboard = () => {
     } else {
       attackedLocation.attackMissed = true;
     }
+    return true;
   };
 
   const allShipsSunk = () => {

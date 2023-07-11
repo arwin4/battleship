@@ -1,6 +1,7 @@
 import Gameboard from './gameboard.js';
 
 const Player = () => {
+  const turn = false;
   const board = Gameboard();
   const previousMoves = [];
   const getPreviousMoves = () => previousMoves;
@@ -41,7 +42,7 @@ const Player = () => {
     return newMove;
   };
 
-  return { board, randomMove, getPreviousMoves };
+  return { board, randomMove, getPreviousMoves, turn };
 };
 
 export default Player;
