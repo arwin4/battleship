@@ -11,8 +11,10 @@ const game = () => {
   player2.board.placeShip(1, 1, 'ship1', 1, 'horizontal');
   player2.board.placeShip(3, 3, 'ship1', 2, 'vertical');
 
-  // Wait for an attack, then switch players.
-  // Player parameter is the attacking player
+  /**
+   * Wait for an attack, then switch players.
+   * Player parameter is the attacking player
+   */
   const handleAttack = (player, row, column) => {
     // Deny attack if it's not that player's turn
     if (!player.turn) return false;
