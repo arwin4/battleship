@@ -3,6 +3,7 @@ import game from './game.js';
 const game1 = game();
 const { player1 } = game1;
 const { player2 } = game1;
+player2.makeAI();
 
 const primaryBoard1 = document.querySelector('.player-1-primary');
 const primaryBoard2 = document.querySelector('.player-2-primary');
@@ -104,11 +105,17 @@ function handleAttackClick(e) {
 
   // Handle the attack and update the cell style on the appropriate boards
   if (e.target.parentElement.className === 'player-1-tracking') {
-    game1.handleAttack(player1, row, column);
+    const attack = game1.handleAttack(player1, row, column);
     updateCellStyle(player1, row, column);
+
+    // Update the board if the AI has also made a move
+    if (!player2.isHuman()) updateCellStyle(player2, attack[0], attack[1]);
   } else {
-    game1.handleAttack(player2, row, column);
+    const attack = game1.handleAttack(player2, row, column);
     updateCellStyle(player2, row, column);
+
+    // Update the board if the AI has also made a move
+    if (!player1.isHuman()) updateCellStyle(player2, attack[0], attack[1]);
   }
 }
 

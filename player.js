@@ -1,10 +1,19 @@
 import Gameboard from './gameboard.js';
 
 const Player = () => {
+  // Make player human by default. Allow this state to be changed.
+  let human = true;
+  const isHuman = () => human;
+  const makeHuman = () => {
+    human = true;
+  };
+  const makeAI = () => {
+    human = false;
+  };
+
   const turn = false;
   const board = Gameboard();
-  const previousMoves = [];
-  const getPreviousMoves = () => previousMoves;
+  const previousRandomMoves = [];
 
   const randomMove = () => {
     function getRandomIntInclusive(min, max) {
@@ -25,13 +34,13 @@ const Player = () => {
        * Compare the rolled move against the previously made ones.
        * Map the moves to strings to allow filtering.
        */
-      const previouslyMadeMove = previousMoves
+      const previouslyMadeMove = previousRandomMoves
         .map((oldMove) => JSON.stringify(oldMove))
         .filter((oldMove) => oldMove === `[${randomRow},${randomColumn}]`);
 
       if (previouslyMadeMove.length === 0) {
         // Move wasn't made before
-        previousMoves.push(newMove);
+        previousRandomMoves.push(newMove);
         needAnotherMove = false;
       } else {
         // Move was made before, roll another
@@ -42,7 +51,26 @@ const Player = () => {
     return newMove;
   };
 
-  return { board, randomMove, getPreviousMoves, turn };
+  const attack = (opponent, row, column) => {
+    if (!opponent.board.receiveAttack(row, column)) return false;
+    return true;
+  };
+
+  const attackRandom = (opponent) => {
+    const move = randomMove();
+    opponent.board.receiveAttack(move[0], move[1]);
+    return move;
+  };
+
+  return {
+    board,
+    attackRandom,
+    turn,
+    isHuman,
+    makeHuman,
+    makeAI,
+    attack,
+  };
 };
 
 export default Player;

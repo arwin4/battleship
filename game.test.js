@@ -44,11 +44,30 @@ describe('Turns', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
-    expect(testGame.handleAttack(player1, 0, 0)).toBe(true);
-    expect(testGame.handleAttack(player1, 0, 0)).toBe(false);
-    expect(testGame.handleAttack(player1, 0, 0)).toBe(false);
-    expect(testGame.handleAttack(player2, 0, 0)).toBe(true);
-    expect(testGame.handleAttack(player2, 0, 0)).toBe(false);
-    expect(testGame.handleAttack(player2, 0, 0)).toBe(false);
+    testGame.handleAttack(player1, 0, 0);
+    expect(player1.turn).toBe(false);
+    testGame.handleAttack(player1, 0, 0);
+    expect(player1.turn).toBe(false);
+  });
+});
+
+describe('AI', () => {
+  test('Player 1 should be human, player 2 should be an AI', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+
+    player2.makeAI();
+    expect(player1.isHuman()).toBe(true);
+    expect(player2.isHuman()).toBe(false);
+  });
+  test('After player 1 (user) makes a move, player 2 (AI) should make a move', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player2.makeAI();
+    testGame.handleAttack(player1, 0, 0);
+    expect(player1.turn).toBe(true);
+    expect(player2.turn).toBe(false);
   });
 });
