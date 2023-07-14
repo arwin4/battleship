@@ -71,3 +71,10 @@ describe('AI', () => {
     expect(player2.turn).toBe(false);
   });
 });
+
+describe('Game end', () => {
+  test('Reject attacks on player1 if their ships are all sunk', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+  });
+});
