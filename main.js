@@ -109,13 +109,17 @@ function handleAttackClick(e) {
     updateCellStyle(player1, row, column);
 
     // Update the board if the AI has also made a move
-    if (!player2.isHuman()) updateCellStyle(player2, attack[0], attack[1]);
+    if (!player2.isHuman()) {
+      setTimeout(() => updateCellStyle(player2, attack[0], attack[1]), 500);
+    }
   } else {
     const attack = game1.handleAttack(player2, row, column);
     updateCellStyle(player2, row, column);
 
     // Update the board if the AI has also made a move
-    if (!player1.isHuman()) updateCellStyle(player2, attack[0], attack[1]);
+    if (!player1.isHuman()) {
+      setTimeout(() => updateCellStyle(player1, attack[0], attack[1]), 500);
+    }
   }
 }
 
