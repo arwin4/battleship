@@ -21,37 +21,21 @@ const game = () => {
     // Deny attack if it's not that player's turn
     if (!player.turn) return;
 
-    // Handle attack if player 1 is attacking
-    if (player === player1) {
-      // Deny attack if invalid
-      if (!player1.attack(player2, row, column)) return;
+    // Find out who is making this move and assign their opponent
+    const currentPlayer = player === player1 ? player1 : player2;
+    const opponent = player === player1 ? player2 : player1;
 
-      player1.turn = false;
-      player2.turn = true;
-
-      // Have opponent make their move if it's an AI
-      if (!player2.isHuman()) {
-        const attack = player2.attackRandom(player1);
-        player2.turn = false;
-        player1.turn = true;
-        // eslint-disable-next-line consistent-return
-        return attack;
-      }
-      return;
-    }
-
-    // Handle attack if player 2 is attacking
     // Deny attack if invalid
-    if (!player2.attack(player1, row, column)) return;
+    if (!currentPlayer.attack(opponent, row, column)) return;
 
-    player2.turn = false;
-    player1.turn = true;
+    currentPlayer.turn = false;
+    opponent.turn = true;
 
     // Have opponent make their move if it's an AI
-    if (!player1.isHuman()) {
-      const attack = player1.attackRandom(player2);
-      player1.turn = false;
-      player2.turn = true;
+    if (!opponent.isHuman()) {
+      const attack = opponent.attackRandom(currentPlayer);
+      opponent.turn = false;
+      currentPlayer.turn = true;
       // eslint-disable-next-line consistent-return
       return attack;
     }
