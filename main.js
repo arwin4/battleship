@@ -102,24 +102,20 @@ function handleAttackClick(e) {
   // Get the row and column numbers of the clicked cell
   const row = e.target.getAttribute('row-number');
   const column = e.target.getAttribute('column-number');
+  // Get the board that was clicked on
+  const board = e.target.parentElement.className;
+
+  // Find out who is making this move and assign their opponent
+  const currentPlayer = board === 'player-1-tracking' ? player1 : player2;
+  const opponent = board === 'player-1-tracking' ? player2 : player1;
 
   // Handle the attack and update the cell style on the appropriate boards
-  if (e.target.parentElement.className === 'player-1-tracking') {
-    const attack = game1.handleAttack(player1, row, column);
-    updateCellStyle(player1, row, column);
+  const attack = game1.handleAttack(currentPlayer, row, column);
+  updateCellStyle(currentPlayer, row, column);
 
-    // Update the board if the AI has also made a move
-    if (!player2.isHuman()) {
-      setTimeout(() => updateCellStyle(player2, attack[0], attack[1]), 500);
-    }
-  } else {
-    const attack = game1.handleAttack(player2, row, column);
-    updateCellStyle(player2, row, column);
-
-    // Update the board if the AI has also made a move
-    if (!player1.isHuman()) {
-      setTimeout(() => updateCellStyle(player1, attack[0], attack[1]), 500);
-    }
+  // Update the board if the AI has also made a move
+  if (!opponent.isHuman()) {
+    setTimeout(() => updateCellStyle(opponent, attack[0], attack[1]), 500);
   }
 }
 
