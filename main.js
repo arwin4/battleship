@@ -52,38 +52,23 @@ function renderTrackingBoards() {
 
 // Update the style of a cell whose status has changed, on both the primary and tracking board
 function updateCellStyle(player, row, column) {
-  if (player === player1) {
-    const primaryCellToBeUpdated = document.querySelector(
-      `.player-2-primary > [row-number="${row}"][column-number="${column}"]`,
-    );
-    const trackingCellToBeUpdated = document.querySelector(
-      `.player-1-tracking > [row-number="${row}"][column-number="${column}"]`,
-    );
+  // Get the cell on the primary board, depending on who just made a move
+  // prettier-ignore
+  const primaryCellToBeUpdated = player === player1
+      ? document.querySelector(`.player-2-primary > [row-number="${row}"][column-number="${column}"]`)
+      : document.querySelector(`.player-1-primary > [row-number="${row}"][column-number="${column}"]`);
 
-    const boardCells = player2.board.getBoard();
-    if (boardCells[row][column].wasAttacked) {
-      trackingCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
-      primaryCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
-    }
+  // Get the cell on the tracking board, depending on who just made a move
+  // prettier-ignore
+  const trackingCellToBeUpdated = player === player1
+      ? document.querySelector(`.player-1-tracking > [row-number="${row}"][column-number="${column}"]`)
+      : document.querySelector(`.player-2-tracking > [row-number="${row}"][column-number="${column}"]`);
 
-    if (
-      boardCells[row][column].shipPresent &&
-      boardCells[row][column].wasAttacked
-    ) {
-      trackingCellToBeUpdated.style.setProperty('background-color', 'darkred');
-      primaryCellToBeUpdated.style.setProperty('background-color', 'darkred');
-    }
-    return;
-  }
+  // Get the board with the cell whose status has changed
+  const opponent = player === player1 ? player2 : player1;
+  const boardCells = opponent.board.getBoard();
 
-  const primaryCellToBeUpdated = document.querySelector(
-    `.player-1-primary > [row-number="${row}"][column-number="${column}"]`,
-  );
-  const trackingCellToBeUpdated = document.querySelector(
-    `.player-2-tracking > [row-number="${row}"][column-number="${column}"]`,
-  );
-
-  const boardCells = player1.board.getBoard();
+  // Change the style of the cells according to its new state
   if (boardCells[row][column].wasAttacked) {
     trackingCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
     primaryCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
