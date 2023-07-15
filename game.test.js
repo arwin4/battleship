@@ -105,15 +105,35 @@ describe('AI', () => {
 });
 
 describe('Game end', () => {
-  test.skip('Reject attacks on player2 if they have lost', () => {
+  test('After player 2 has all their ships sunk, player 1 should not be allowed another attack', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
     player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
     player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
     testGame.handleAttack(player1, 0, 0);
-    // Player 2 lost (but still gets to make an attack for this round)
     testGame.handleAttack(player2, 0, 0);
-    expect(testGame.handleAttack(player1, 0, 1)).toBe(false);
+    expect(testGame.handleAttack(player1, 1, 1)).toBe(false);
+  });
+  test('After player 2 has all their ships sunk, player 2 should be allowed another attack (to attempt a draw)', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0);
+    // Player 2 can't win (but still gets to make an attack for this round to attempt a draw)
+    expect(testGame.handleAttack(player2, 0, 0)).toBe(true);
+  });
+  test('After player 2 has all their ships sunk, and player 2 makes one more attack, no more attacks by either player are allowed', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0);
+    testGame.handleAttack(player2, 1, 1);
+    expect(testGame.handleAttack(player1, 5, 5)).toBe(false);
+    expect(testGame.handleAttack(player2, 5, 5)).toBe(false);
   });
 });
