@@ -1,9 +1,19 @@
 import game from './game.js';
 
-const game1 = game();
-const { player1 } = game1;
-const { player2 } = game1;
-player2.makeAI();
+let game1;
+let player1;
+let player2;
+
+function newGame() {
+  game1 = game();
+  player1 = game1.player1;
+  player2 = game1.player2;
+  // Ship placements are hardcoded for now
+  player1.board.placeShip(0, 0, 'ship1', 2, 'vertical');
+  player2.board.placeShip(1, 1, 'ship1', 2, 'horizontal');
+}
+
+newGame();
 
 const primaryBoard1 = document.querySelector('.player-1-primary');
 const primaryBoard2 = document.querySelector('.player-2-primary');
@@ -14,6 +24,7 @@ const trackingBoards = [trackingBoard1, trackingBoard2];
 
 // Render boards with ships visible
 function renderPrimaryBoard(player, board) {
+  board.replaceChildren();
   const boardCells = player.board.getBoard();
   for (let i = 0; i < 10; i += 1) {
     for (let j = 0; j < 10; j += 1) {
@@ -38,6 +49,7 @@ function renderPrimaryBoard(player, board) {
 // Fill tracking board nodes with 10x10 cells
 function renderTrackingBoards() {
   trackingBoards.forEach((board) => {
+    board.replaceChildren();
     for (let i = 0; i < 10; i += 1) {
       for (let j = 0; j < 10; j += 1) {
         const cell = document.createElement('button');
@@ -112,9 +124,20 @@ function setTrackingBoardListeners() {
   });
 }
 
-renderPrimaryBoard(player1, primaryBoard1);
-renderPrimaryBoard(player2, primaryBoard2);
+function prepareBoards() {
+  renderPrimaryBoard(player1, primaryBoard1);
+  renderPrimaryBoard(player2, primaryBoard2);
+  renderTrackingBoards();
+  setTrackingBoardListeners();
+}
 
-renderTrackingBoards();
+function activateButtons() {
+  const newGameBtn = document.querySelector('.new-game');
+  newGameBtn.addEventListener('click', () => {
+    newGame();
+    prepareBoards();
+  });
+}
 
-setTrackingBoardListeners();
+prepareBoards();
+activateButtons();
