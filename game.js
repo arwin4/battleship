@@ -3,8 +3,12 @@ import Player from './player.js';
 const game = () => {
   const player1 = Player();
   const player2 = Player();
+
   // Allow player 1 select the first attack of the game
   player1.turn = true;
+
+  let currentTurnNumber = 1;
+  const getCurrentTurnNumber = () => currentTurnNumber;
 
   /**
    * Wait for an attack, then switch players.
@@ -25,17 +29,22 @@ const game = () => {
     currentPlayer.turn = false;
     opponent.turn = true;
 
-    // Have opponent make their move if it's an AI
+    // If the attack was made by player 2, this is the end of a turn
+    if (currentPlayer === player2) currentTurnNumber += 1;
+
+    // Have opponent make their move if it's an AI.
+    // (Only player 2 should be made an AI.)
     if (!opponent.isHuman()) {
       const attack = opponent.attackRandom(currentPlayer);
       opponent.turn = false;
       currentPlayer.turn = true;
+      currentTurnNumber += 1;
       // eslint-disable-next-line consistent-return
       return attack;
     }
   };
 
-  return { player1, player2, handleAttack };
+  return { player1, player2, handleAttack, getCurrentTurnNumber };
 };
 
 export default game;
