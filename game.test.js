@@ -49,44 +49,37 @@ describe('Turns', () => {
     testGame.handleAttack(player1, 0, 0);
     expect(player1.turn).toBe(false);
   });
-  test('Turn number before any moves are made should be 1', () => {
+  test('Turn number before any moves are made should be 1 for both players', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
-    expect(testGame.getCurrentTurnNumber()).toBe(1);
+    expect(testGame.player1.getCurrentTurnNumber()).toBe(1);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(1);
   });
-  test('Turn number after 1 attack should be 1', () => {
-    const testGame = game();
-    const player1 = testGame.player1;
-    const player2 = testGame.player2;
-    testGame.handleAttack(player1, 0, 0);
-    expect(testGame.getCurrentTurnNumber()).toBe(1);
-  });
-  test('Turn number after 2 attacks should be 2', () => {
+  test('Turn number after player 1 attacks should be 2 for player 1 and 1 for player 2', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
     testGame.handleAttack(player1, 0, 0);
-    testGame.handleAttack(player2, 0, 0);
-    expect(testGame.getCurrentTurnNumber()).toBe(2);
+    expect(testGame.player1.getCurrentTurnNumber()).toBe(2);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(1);
   });
-  test('Turn number after 4 attacks should be 3', () => {
+  test('Turn number after each player attacks should be 2 for both players', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
     testGame.handleAttack(player1, 0, 0);
     testGame.handleAttack(player2, 0, 0);
-    testGame.handleAttack(player1, 2, 2);
-    testGame.handleAttack(player2, 2, 2);
-    expect(testGame.getCurrentTurnNumber()).toBe(3);
+    expect(testGame.player1.getCurrentTurnNumber()).toBe(2);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(2);
   });
-  test(`If player 2 is an AI, turn number should be 2 after player1's attack`, () => {
+  test(`If player 2 is an AI, their turn number should be 2 after player1's attack`, () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
     player2.makeAI();
     testGame.handleAttack(player1, 0, 0);
-    expect(testGame.getCurrentTurnNumber()).toBe(2);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(2);
   });
 });
 
@@ -112,8 +105,15 @@ describe('AI', () => {
 });
 
 describe('Game end', () => {
-  test('Reject attacks on player1 if their ships are all sunk', () => {
+  test.skip('Reject attacks on player2 if they have lost', () => {
     const testGame = game();
     const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0);
+    // Player 2 lost (but still gets to make an attack for this round)
+    testGame.handleAttack(player2, 0, 0);
+    expect(testGame.handleAttack(player1, 0, 1)).toBe(false);
   });
 });

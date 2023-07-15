@@ -11,6 +11,12 @@ const Player = () => {
     human = false;
   };
 
+  let currentTurnNumber = 1;
+  const getCurrentTurnNumber = () => currentTurnNumber;
+  const addTurn = () => {
+    currentTurnNumber += 1;
+  };
+
   const turn = false;
   const board = Gameboard();
   const previousRandomMoves = [];
@@ -66,6 +72,8 @@ const Player = () => {
     board,
     attackRandom,
     turn,
+    getCurrentTurnNumber,
+    addTurn,
     isHuman,
     makeHuman,
     makeAI,
