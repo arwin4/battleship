@@ -137,3 +137,78 @@ describe('Game end', () => {
     expect(testGame.handleAttack(player2, 5, 5)).toBe(false);
   });
 });
+
+describe('isGameDraw()', () => {
+  test('Should return false if player 1 wins', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0); // Hit, sinks all ships
+    testGame.handleAttack(player2, 1, 1); // Miss
+    expect(testGame.isGameDraw()).toBe(false);
+  });
+  test('Should return false if player 2 wins', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 1, 1); // Miss
+    testGame.handleAttack(player2, 0, 0); // Hit, sinks all ships
+    expect(testGame.isGameDraw()).toBe(false);
+  });
+  test('Should return true if a draw', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0); // Hit, sinks all ships
+    testGame.handleAttack(player2, 0, 0); // Hit, sinks all ships
+    expect(testGame.isGameDraw()).toBe(true);
+  });
+});
+
+describe('findWinner()', () => {
+  test(`Should throw 'Game is a draw' if the game is a draw`, () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0); // Hit, sinks all ships
+    testGame.handleAttack(player2, 0, 0); // Hit, sinks all ships
+    expect(() => testGame.findWinner()).toThrow('Game is a draw');
+  });
+  test(`Should throw 'Game is still ongoing' if the game is ongoing`, () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0); // Hit, sinks all ships
+    expect(() => testGame.findWinner()).toThrow('Game is still ongoing');
+  });
+  test('Should return player1 if player2 has lost', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 0, 0); // Hit, sinks all ships
+    testGame.handleAttack(player2, 1, 1); // Miss, player 2 loses
+    expect(testGame.findWinner()).toBe(player1);
+  });
+  test('Should return player2 if player1 has lost', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    const player2 = testGame.player2;
+    player1.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    player2.board.placeShip(0, 0, 'ship1', 1, 'horizontal');
+    testGame.handleAttack(player1, 1, 1); // Miss
+    testGame.handleAttack(player2, 0, 0); // Hit, player 1 loses
+    expect(testGame.findWinner()).toBe(player2);
+  });
+});

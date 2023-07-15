@@ -16,6 +16,16 @@ const game = () => {
     (player1.board.allShipsSunk() || player2.board.allShipsSunk()) &&
     player1.getCurrentTurnNumber() === player2.getCurrentTurnNumber();
 
+  const isGameDraw = () =>
+    player1.board.allShipsSunk() && player2.board.allShipsSunk();
+
+  const findWinner = () => {
+    if (!isGameOver()) throw new Error('Game is still ongoing');
+    if (isGameDraw()) throw new Error('Game is a draw');
+    // Can now safely return winner without checking player2's sunk status
+    return player1.board.allShipsSunk() ? player2 : player1;
+  };
+
   /**
    * Wait for an attack, then switch players.
    * Player parameter is the attacking player.
@@ -50,7 +60,7 @@ const game = () => {
     return true;
   };
 
-  return { player1, player2, handleAttack, isGameOver };
+  return { player1, player2, handleAttack, isGameOver, isGameDraw, findWinner };
 };
 
 export default game;
