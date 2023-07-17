@@ -108,6 +108,8 @@ function handleAttackClick(e) {
 
   // Handle the attack and update the cell style on the appropriate boards
   const attack = game1.handleAttack(currentPlayer, row, column);
+  if (!attack) return;
+
   updateCellStyle(currentPlayer, row, column);
 
   // Update the board if the AI has also made a move
