@@ -14,16 +14,16 @@
   justify-content: space-around;
 }
 
-.primary-boards {
+.player-1-boards {
   grid-area: 1 / 1 / 2 / 2;
 }
 
-.tracking-boards {
+.player-2-boards {
   grid-area: 2 / 1 / 3 / 2;
 }
 
-.primary-boards > *,
-.tracking-boards > * {
+.player-1-boards > *,
+.player-2-boards > * {
   width: 300px;
   height: 300px;
 

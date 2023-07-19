@@ -13,14 +13,14 @@ function newGame() {
   player2.board.placeShip(1, 1, 'ship1', 2, 'horizontal');
 }
 
-newGame();
-
 const primaryBoard1 = document.querySelector('.player-1-primary');
 const primaryBoard2 = document.querySelector('.player-2-primary');
 
 const trackingBoard1 = document.querySelector('.player-1-tracking');
 const trackingBoard2 = document.querySelector('.player-2-tracking');
 const trackingBoards = [trackingBoard1, trackingBoard2];
+
+const player2boards = document.querySelector('.player-2-boards');
 
 // Render boards with ships visible
 function renderPrimaryBoard(player, board) {
@@ -137,9 +137,20 @@ function activateButtons() {
   const newGameBtn = document.querySelector('.new-game');
   newGameBtn.addEventListener('click', () => {
     newGame();
+    player2.makeHuman();
     prepareBoards();
+    player2boards.style.setProperty('visibility', 'visible');
+  });
+
+  const playVScomputerBtn = document.querySelector('.play-ai');
+  playVScomputerBtn.addEventListener('click', () => {
+    newGame();
+    player2.makeAI();
+    prepareBoards();
+    player2boards.style.setProperty('visibility', 'collapse');
   });
 }
 
+newGame();
 prepareBoards();
 activateButtons();
