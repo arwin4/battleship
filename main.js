@@ -13,6 +13,7 @@ function newGame() {
   player2.board.placeShip(1, 1, 'ship1', 2, 'horizontal');
 }
 
+// DOM element getters
 const primaryBoard1 = document.querySelector('.player-1-primary');
 const primaryBoard2 = document.querySelector('.player-2-primary');
 
