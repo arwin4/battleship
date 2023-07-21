@@ -134,22 +134,27 @@ function prepareBoards() {
   setTrackingBoardListeners();
 }
 
+function newGameBtnHandler() {
+  newGame();
+  player2.makeHuman();
+  prepareBoards();
+  player2boards.classList.remove('hidden');
+}
+
+function playVScomputerBtnHandler() {
+  newGame();
+  player2.makeAI();
+  prepareBoards();
+  player2boards.classList.add('hidden');
+  player1boards.after(shipsToPlace);
+}
+
 function activateButtons() {
   const newGameBtn = document.querySelector('.new-game');
-  newGameBtn.addEventListener('click', () => {
-    newGame();
-    player2.makeHuman();
-    prepareBoards();
-    player2boards.style.setProperty('visibility', 'visible');
-  });
+  newGameBtn.addEventListener('click', () => newGameBtnHandler());
 
   const playVScomputerBtn = document.querySelector('.play-ai');
-  playVScomputerBtn.addEventListener('click', () => {
-    newGame();
-    player2.makeAI();
-    prepareBoards();
-    player2boards.style.setProperty('visibility', 'collapse');
-  });
+  playVScomputerBtn.addEventListener('click', () => playVScomputerBtnHandler());
 }
 
 newGame();
