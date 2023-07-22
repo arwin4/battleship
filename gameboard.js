@@ -91,7 +91,7 @@ const Gameboard = () => {
 
   const getBoard = () => board;
 
-  return { getBoard, placeShip, receiveAttack, allShipsSunk };
+  return { getBoard, placeShip, receiveAttack, allShipsSunk, getShipArray };
 };
 
 export default Gameboard;
