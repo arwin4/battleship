@@ -3,6 +3,7 @@ import game from './game.js';
 let game1;
 let player1;
 let player2;
+let currentShipOrientation = 'horizontal';
 
 function newGame() {
   game1 = game();
@@ -156,44 +157,77 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function renderShipPlacement(e, name, length, orientation) {
+function renderShipPlacement(e, name, length) {
   const cellInfo = getCellInfo(e);
   const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
   // Place the ship on the internal board, if valid
-  if (!player1.board.placeShip(row, column, name, length, orientation)) return;
+  if (
+    !player1.board.placeShip(row, column, name, length, currentShipOrientation)
+  )
+    return;
 
   const shipArray = player1.board.getShipArray(
     row,
     column,
     length,
-    orientation,
+    currentShipOrientation,
   );
   shipArray.forEach((location) =>
     updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
   );
 }
 
-function listenForShipPlacement(boardElem, name, length, orientation) {
+function listenForShipPlacement(boardElem, name, length) {
   boardElem.childNodes.forEach((cell) => {
-    cell.addEventListener(
-      'click',
-      (e) => renderShipPlacement(e, name, length, orientation),
-      { once: true },
+    cell.addEventListener('click', (e) =>
+      renderShipPlacement(e, name, length, currentShipOrientation),
     );
+  });
+}
+
+function renderNewOrientationText(orientationText) {
+  const currentOrientationText = orientationText;
+  if (currentShipOrientation === 'vertical') {
+    currentOrientationText.textContent =
+      'Currently placing the ship vertically from the cell of your choosing...';
+  } else {
+    currentOrientationText.textContent =
+      'Currently placing the ship horizontally from the cell of your choosing...';
+  }
+}
+
+function renderRotateShip() {
+  const orientationContainer = document.querySelector('.orientation');
+  orientationContainer.replaceChildren();
+
+  const orientationText = document.createElement('p');
+  orientationText.textContent =
+    'Currently placing the ship horizontally from the cell of your choosing...';
+  orientationContainer.appendChild(orientationText);
+
+  const toggleOrientationBtn = document.createElement('button');
+  toggleOrientationBtn.textContent = 'Change orientation';
+  orientationContainer.appendChild(toggleOrientationBtn);
+
+  toggleOrientationBtn.addEventListener('click', () => {
+    currentShipOrientation =
+      currentShipOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+    renderNewOrientationText(orientationText);
   });
 }
 
 function activateShipsToPlaceButtons() {
   const carrierButton = document.querySelector('.ships-to-place-list .carrier');
-  // TODO: Allow changing the orientation
-  const orientation = 'horizontal';
   const boardElem = primaryBoard1;
   carrierButton.addEventListener(
     'click',
-    () => listenForShipPlacement(boardElem, 'Carrier', 5, orientation),
+    () => {
+      renderRotateShip();
+      listenForShipPlacement(boardElem, 'Carrier', 5, currentShipOrientation);
+    },
     // TODO: deactivate once this ship has been placed
   );
 }
