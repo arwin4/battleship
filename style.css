@@ -22,8 +22,10 @@
   grid-area: 2 / 1 / 3 / 2;
 }
 
-.player-1-boards > *,
-.player-2-boards > * {
+.player-1-primary,
+.player-2-primary,
+.player-1-tracking,
+.player-2-tracking {
   width: 300px;
   height: 300px;
 
@@ -34,4 +36,21 @@
   border: 4px solid rgb(0, 0, 0);
   box-shadow: inset 0px 0px 5px 0px rgb(0 0 0 / 75%);
   border-radius: 2%;
+}
+
+.ships-to-place-list {
+  display: grid;
+  row-gap: 10px;
+}
+
+.ship-present {
+  background-color: green;
+}
+
+.was-attacked {
+  background-color: darkgrey;
+}
+
+.hidden {
+  display: none;
 }
