@@ -156,26 +156,31 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function renderShipPlacement(e, name, length, direction) {
+function renderShipPlacement(e, name, length, orientation) {
   const cellInfo = getCellInfo(e);
   const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
   // Place the ship on the internal board, if valid
-  if (!player1.board.placeShip(row, column, name, length, direction)) return;
+  if (!player1.board.placeShip(row, column, name, length, orientation)) return;
 
-  const shipArray = player1.board.getShipArray(row, column, length, direction);
+  const shipArray = player1.board.getShipArray(
+    row,
+    column,
+    length,
+    orientation,
+  );
   shipArray.forEach((location) =>
     updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
   );
 }
 
-function listenForShipPlacement(boardElem, name, length, direction) {
+function listenForShipPlacement(boardElem, name, length, orientation) {
   boardElem.childNodes.forEach((cell) => {
     cell.addEventListener(
       'click',
-      (e) => renderShipPlacement(e, name, length, direction),
+      (e) => renderShipPlacement(e, name, length, orientation),
       { once: true },
     );
   });
@@ -183,12 +188,12 @@ function listenForShipPlacement(boardElem, name, length, direction) {
 
 function activateShipsToPlaceButtons() {
   const carrierButton = document.querySelector('.ships-to-place-list .carrier');
-  // TODO: Allow changing the direction
-  const direction = 'horizontal';
+  // TODO: Allow changing the orientation
+  const orientation = 'horizontal';
   const boardElem = primaryBoard1;
   carrierButton.addEventListener(
     'click',
-    () => listenForShipPlacement(boardElem, 'Carrier', 5, direction),
+    () => listenForShipPlacement(boardElem, 'Carrier', 5, orientation),
     // TODO: deactivate once this ship has been placed
   );
 }
