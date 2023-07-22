@@ -47,8 +47,12 @@
   background-color: green;
 }
 
-.was-attacked {
+.miss {
   background-color: darkgrey;
+}
+
+.hit {
+  background-color: darkred;
 }
 
 .hidden {

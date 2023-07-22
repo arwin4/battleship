@@ -27,6 +27,14 @@ const shipsToPlace = document
   .querySelector('.ships-to-place')
   .content.cloneNode(true);
 
+function updateCellStyle(boardClassName, row, column, style) {
+  const cellToUpdate = document.querySelector(
+    `.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
+  );
+
+  cellToUpdate.className = style;
+}
+
 // Render boards with ships visible
 function renderPrimaryBoard(player, board) {
   board.replaceChildren();
@@ -39,13 +47,7 @@ function renderPrimaryBoard(player, board) {
       board.appendChild(cell);
 
       if (boardCells[i][j].shipPresent)
-        cell.style.setProperty('background-color', 'green');
-
-      if (boardCells[i][j].wasAttacked)
-        cell.style.setProperty('background-color', 'darkgrey');
-
-      if (boardCells[i][j].shipPresent && boardCells[i][j].wasAttacked)
-        cell.style.setProperty('background-color', 'darkred');
+        updateCellStyle(board.className, i, j, 'ship-present');
     }
   }
 }
@@ -65,67 +67,68 @@ function renderTrackingBoards() {
   });
 }
 
-// Update the style of a cell whose status has changed, on both the primary and tracking board
-// TODO: refactor to use extracted functionality
-function updateBoardAfterAttack(player, row, column) {
-  // Get the cell on the primary board, depending on who just made a move
-  // prettier-ignore
-  const primaryCellToBeUpdated = player === player1
-      ? document.querySelector(`.player-2-primary > [row-number="${row}"][column-number="${column}"]`)
-      : document.querySelector(`.player-1-primary > [row-number="${row}"][column-number="${column}"]`);
+function getCellInfo(e) {
+  const row = Number.parseFloat(e.target.getAttribute('row-number'));
+  const column = Number.parseFloat(e.target.getAttribute('column-number'));
+  const boardElem = e.target.parentElement;
+  const boardClassName = e.target.parentElement.className;
 
-  // Get the cell on the tracking board, depending on who just made a move
-  // prettier-ignore
-  const trackingCellToBeUpdated = player === player1
-      ? document.querySelector(`.player-1-tracking > [row-number="${row}"][column-number="${column}"]`)
-      : document.querySelector(`.player-2-tracking > [row-number="${row}"][column-number="${column}"]`);
+  const opponentBoardClassName =
+    boardClassName === 'player-1-tracking'
+      ? 'player-2-primary'
+      : 'player-1-primary';
+
+  return { row, column, boardElem, boardClassName, opponentBoardClassName };
+}
+
+// Update the style of a cell whose status has changed, on both the primary and tracking board
+function updateBoardsAfterAttack(cellInfo, opponent) {
+  const { row } = cellInfo;
+  const { column } = cellInfo;
+  const { boardClassName } = cellInfo;
+  const { opponentBoardClassName } = cellInfo;
 
   // Get the board with the cell whose status has changed
-  const opponent = player === player1 ? player2 : player1;
   const boardCells = opponent.board.getBoard();
 
-  // Change the style of the cells according to its new state
-  if (boardCells[row][column].wasAttacked) {
-    trackingCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
-    primaryCellToBeUpdated.style.setProperty('background-color', 'darkgrey');
+  if (
+    boardCells[row][column].wasAttacked &&
+    !boardCells[row][column].shipPresent
+  ) {
+    updateCellStyle(boardClassName, row, column, 'miss');
+    updateCellStyle(opponentBoardClassName, row, column, 'miss');
   }
 
   if (
     boardCells[row][column].shipPresent &&
     boardCells[row][column].wasAttacked
   ) {
-    trackingCellToBeUpdated.style.setProperty('background-color', 'darkred');
-    primaryCellToBeUpdated.style.setProperty('background-color', 'darkred');
+    updateCellStyle(boardClassName, row, column, 'hit');
+    updateCellStyle(opponentBoardClassName, row, column, 'hit');
   }
-}
-
-function getCellInfo(e) {
-  const row = Number.parseFloat(e.target.getAttribute('row-number'));
-  const column = Number.parseFloat(e.target.getAttribute('column-number'));
-  const boardElem = e.target.parentElement.className;
-  return { row, column, boardElem };
 }
 
 function handleAttackClick(e) {
   const cellInfo = getCellInfo(e);
-  const { boardElem } = cellInfo;
+  const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
   // Find out who is making this move and assign their opponent
-  const currentPlayer = boardElem === 'player-1-tracking' ? player1 : player2;
-  const opponent = boardElem === 'player-1-tracking' ? player2 : player1;
+  const currentPlayer =
+    boardClassName === 'player-1-tracking' ? player1 : player2;
+  const opponent = boardClassName === 'player-1-tracking' ? player2 : player1;
 
   // Handle the attack and update the cell style on the appropriate boards
   const attack = game1.handleAttack(currentPlayer, row, column);
   if (!attack) return;
 
-  updateBoardAfterAttack(currentPlayer, row, column);
+  updateBoardsAfterAttack(cellInfo, opponent);
 
-  // Update the board if the AI has also made a move
+  // Update the board again if the AI has also made a move
   if (!opponent.isHuman()) {
     setTimeout(
-      () => updateBoardAfterAttack(opponent, attack[0], attack[1]),
+      () => updateBoardsAfterAttack(opponent, attack[0], attack[1]),
       500,
     );
   }
@@ -153,17 +156,9 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function updateCellStyle(boardElem, row, column, style) {
-  const boardClassName = boardElem.className;
-  const cellToUpdate = document.querySelector(
-    `.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
-  );
-
-  cellToUpdate.className = style;
-}
-
-function renderShipPlacement(boardElem, e, name, length, direction) {
+function renderShipPlacement(e, name, length, direction) {
   const cellInfo = getCellInfo(e);
+  const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
@@ -172,7 +167,7 @@ function renderShipPlacement(boardElem, e, name, length, direction) {
 
   const shipArray = player1.board.getShipArray(row, column, length, direction);
   shipArray.forEach((location) =>
-    updateCellStyle(boardElem, location[0], location[1], 'ship-present'),
+    updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
   );
 }
 
@@ -180,7 +175,7 @@ function listenForShipPlacement(boardElem, name, length, direction) {
   boardElem.childNodes.forEach((cell) => {
     cell.addEventListener(
       'click',
-      (e) => renderShipPlacement(boardElem, e, name, length, direction),
+      (e) => renderShipPlacement(e, name, length, direction),
       { once: true },
     );
   });
