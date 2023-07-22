@@ -8,9 +8,6 @@ function newGame() {
   game1 = game();
   player1 = game1.player1;
   player2 = game1.player2;
-  // Ship placements are hardcoded for now
-  player1.board.placeShip(0, 0, 'ship1', 2, 'vertical');
-  player2.board.placeShip(1, 1, 'ship1', 2, 'horizontal');
 }
 
 // DOM element getters
@@ -23,6 +20,10 @@ const trackingBoards = [trackingBoard1, trackingBoard2];
 
 const player2boards = document.querySelector('.player-2-boards');
 
+const shipsToPlace = document
+  .querySelector('.ships-to-place')
+  .content.cloneNode(true);
+
 // Render boards with ships visible
 function renderPrimaryBoard(player, board) {
   board.replaceChildren();
@@ -32,7 +33,6 @@ function renderPrimaryBoard(player, board) {
       const cell = document.createElement('button');
       cell.setAttribute('column-number', j);
       cell.setAttribute('row-number', i);
-      cell.classList.add('cell');
       board.appendChild(cell);
 
       if (boardCells[i][j].shipPresent)
@@ -56,7 +56,6 @@ function renderTrackingBoards() {
         const cell = document.createElement('button');
         cell.setAttribute('column-number', j);
         cell.setAttribute('row-number', i);
-        cell.classList.add('cell');
         board.appendChild(cell);
       }
     }
@@ -64,7 +63,8 @@ function renderTrackingBoards() {
 }
 
 // Update the style of a cell whose status has changed, on both the primary and tracking board
-function updateCellStyle(player, row, column) {
+// TODO: refactor to use extracted functionality
+function updateBoardAfterAttack(player, row, column) {
   // Get the cell on the primary board, depending on who just made a move
   // prettier-ignore
   const primaryCellToBeUpdated = player === player1
@@ -96,26 +96,35 @@ function updateCellStyle(player, row, column) {
   }
 }
 
+function getCellInfo(e) {
+  const row = Number.parseFloat(e.target.getAttribute('row-number'));
+  const column = Number.parseFloat(e.target.getAttribute('column-number'));
+  const boardElem = e.target.parentElement.className;
+  return { row, column, boardElem };
+}
+
 function handleAttackClick(e) {
-  // Get the row and column numbers of the clicked cell
-  const row = e.target.getAttribute('row-number');
-  const column = e.target.getAttribute('column-number');
-  // Get the board that was clicked on
-  const board = e.target.parentElement.className;
+  const cellInfo = getCellInfo(e);
+  const { boardElem } = cellInfo;
+  const { row } = cellInfo;
+  const { column } = cellInfo;
 
   // Find out who is making this move and assign their opponent
-  const currentPlayer = board === 'player-1-tracking' ? player1 : player2;
-  const opponent = board === 'player-1-tracking' ? player2 : player1;
+  const currentPlayer = boardElem === 'player-1-tracking' ? player1 : player2;
+  const opponent = boardElem === 'player-1-tracking' ? player2 : player1;
 
   // Handle the attack and update the cell style on the appropriate boards
   const attack = game1.handleAttack(currentPlayer, row, column);
   if (!attack) return;
 
-  updateCellStyle(currentPlayer, row, column);
+  updateBoardAfterAttack(currentPlayer, row, column);
 
   // Update the board if the AI has also made a move
   if (!opponent.isHuman()) {
-    setTimeout(() => updateCellStyle(opponent, attack[0], attack[1]), 500);
+    setTimeout(
+      () => updateBoardAfterAttack(opponent, attack[0], attack[1]),
+      500,
+    );
   }
 }
 
@@ -141,12 +150,62 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
+function updateCellStyle(boardElem, row, column, style) {
+  const boardClassName = boardElem.className;
+  const cellToUpdate = document.querySelector(
+    `.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
+  );
+
+  cellToUpdate.className = style;
+}
+
+function renderShipPlacement(boardElem, e, name, length, direction) {
+  const cellInfo = getCellInfo(e);
+  const { row } = cellInfo;
+  const { column } = cellInfo;
+
+  // Place the ship on the internal board, if valid
+  if (!player1.board.placeShip(row, column, name, length, direction)) return;
+
+  const shipArray = player1.board.getShipArray(row, column, length, direction);
+  shipArray.forEach((location) =>
+    updateCellStyle(boardElem, location[0], location[1], 'ship-present'),
+  );
+}
+
+function listenForShipPlacement(boardElem, name, length, direction) {
+  boardElem.childNodes.forEach((cell) => {
+    cell.addEventListener(
+      'click',
+      (e) => renderShipPlacement(boardElem, e, name, length, direction),
+      { once: true },
+    );
+  });
+}
+
+function activateShipsToPlaceButtons() {
+  const carrierButton = document.querySelector('.ships-to-place-list .carrier');
+  // TODO: Allow changing the direction
+  const direction = 'horizontal';
+  const boardElem = primaryBoard1;
+  carrierButton.addEventListener(
+    'click',
+    () => listenForShipPlacement(boardElem, 'Carrier', 5, direction),
+    // TODO: deactivate once this ship has been placed
+  );
+}
+
 function playVScomputerBtnHandler() {
+  // Set up new game internally
   newGame();
   player2.makeAI();
+
+  // DOM
   prepareBoards();
   player2boards.classList.add('hidden');
-  player1boards.after(shipsToPlace);
+  trackingBoard1.classList.add('hidden');
+  primaryBoard1.after(shipsToPlace);
+  activateShipsToPlaceButtons();
 }
 
 function activateButtons() {
