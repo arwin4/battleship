@@ -8,6 +8,9 @@ function newGame() {
   game1 = game();
   player1 = game1.player1;
   player2 = game1.player2;
+  // Hardcode ship placements for development
+  player1.board.placeShip(0, 0, 'ship1', 2, 'horizontal');
+  player2.board.placeShip(0, 0, 'ship1', 2, 'horizontal');
 }
 
 // DOM element getters
