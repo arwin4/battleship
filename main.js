@@ -192,6 +192,7 @@ function renderNewOrientationText(orientationText) {
 }
 
 function renderRotateShip() {
+  // FIXME: When the current orientation is vertical, picking a new ship renders the text 'placing horizontally' instead of vertically.
   const orientationContainer = document.querySelector('.orientation');
   orientationContainer.replaceChildren();
 
@@ -230,6 +231,9 @@ function activateShipsToPlaceButtons() {
 
   let carrierPlacementController = null;
   let battleshipPlacementController = null;
+  let cruiserPlacementController = null;
+  let submarinePlacementController = null;
+  let destroyerPlacementController = null;
 
   /**
    * Deactivate cell listeners, allowing a new event listener to be attached, in
@@ -239,8 +243,14 @@ function activateShipsToPlaceButtons() {
   function neutralizeShipPlacementListeners() {
     if (battleshipPlacementController) battleshipPlacementController.abort();
     if (carrierPlacementController) carrierPlacementController.abort();
+    if (cruiserPlacementController) cruiserPlacementController.abort();
+    if (submarinePlacementController) submarinePlacementController.abort();
+    if (destroyerPlacementController) destroyerPlacementController.abort();
     battleshipPlacementController = null;
     carrierPlacementController = null;
+    cruiserPlacementController = null;
+    submarinePlacementController = null;
+    destroyerPlacementController = null;
   }
 
   const carrierButton = document.querySelector('.ships-to-place-list .carrier');
@@ -267,6 +277,49 @@ function activateShipsToPlaceButtons() {
       boardElem,
       'Battleship',
       4,
+      currentShipOrientation,
+    );
+  });
+
+  const cruiserButton = document.querySelector('.ships-to-place-list .cruiser');
+  cruiserButton.addEventListener('click', () => {
+    neutralizeShipPlacementListeners();
+    renderRotateShip();
+
+    cruiserPlacementController = listenForShipPlacement(
+      boardElem,
+      'Cruiser',
+      3,
+      currentShipOrientation,
+    );
+  });
+
+  const submarineButton = document.querySelector(
+    '.ships-to-place-list .submarine',
+  );
+  submarineButton.addEventListener('click', () => {
+    neutralizeShipPlacementListeners();
+    renderRotateShip();
+
+    submarinePlacementController = listenForShipPlacement(
+      boardElem,
+      'Submarine',
+      3,
+      currentShipOrientation,
+    );
+  });
+
+  const destroyerButton = document.querySelector(
+    '.ships-to-place-list .destroyer',
+  );
+  destroyerButton.addEventListener('click', () => {
+    neutralizeShipPlacementListeners();
+    renderRotateShip();
+
+    destroyerPlacementController = listenForShipPlacement(
+      boardElem,
+      'Destroyer',
+      2,
       currentShipOrientation,
     );
   });
