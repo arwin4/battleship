@@ -238,7 +238,6 @@ function activateShipsToPlaceButtons() {
   /**
    * Deactivate cell listeners, allowing a new event listener to be attached, in
    * order to allow a different ship to be placed instead.
-   * Then reset to null so they may be created again.
    */
   function neutralizeShipPlacementListeners() {
     if (battleshipPlacementController) battleshipPlacementController.abort();
@@ -246,6 +245,8 @@ function activateShipsToPlaceButtons() {
     if (cruiserPlacementController) cruiserPlacementController.abort();
     if (submarinePlacementController) submarinePlacementController.abort();
     if (destroyerPlacementController) destroyerPlacementController.abort();
+
+    // Reset controllers to null so they may be created again.
     battleshipPlacementController = null;
     carrierPlacementController = null;
     cruiserPlacementController = null;
