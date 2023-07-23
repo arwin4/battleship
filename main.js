@@ -180,14 +180,6 @@ function renderShipPlacement(e, name, length) {
   );
 }
 
-function listenForShipPlacement(boardElem, name, length) {
-  boardElem.childNodes.forEach((cell) => {
-    cell.addEventListener('click', (e) =>
-      renderShipPlacement(e, name, length, currentShipOrientation),
-    );
-  });
-}
-
 function renderNewOrientationText(orientationText) {
   const currentOrientationText = orientationText;
   if (currentShipOrientation === 'vertical') {
@@ -219,17 +211,65 @@ function renderRotateShip() {
   });
 }
 
+function listenForShipPlacement(boardElem, name, length) {
+  const shipPlacementController = new AbortController();
+
+  boardElem.childNodes.forEach((cell) => {
+    cell.addEventListener(
+      'click',
+      (e) => renderShipPlacement(e, name, length, currentShipOrientation),
+      { signal: shipPlacementController.signal },
+    );
+  });
+  return shipPlacementController;
+}
+
 function activateShipsToPlaceButtons() {
-  const carrierButton = document.querySelector('.ships-to-place-list .carrier');
+  // TODO: deactivate once this ship has been placed
   const boardElem = primaryBoard1;
-  carrierButton.addEventListener(
-    'click',
-    () => {
-      renderRotateShip();
-      listenForShipPlacement(boardElem, 'Carrier', 5, currentShipOrientation);
-    },
-    // TODO: deactivate once this ship has been placed
+
+  let carrierPlacementController = null;
+  let battleshipPlacementController = null;
+
+  /**
+   * Deactivate cell listeners, allowing a new event listener to be attached, in
+   * order to allow a different ship to be placed instead.
+   * Then reset to null so they may be created again.
+   */
+  function neutralizeShipPlacementListeners() {
+    if (battleshipPlacementController) battleshipPlacementController.abort();
+    if (carrierPlacementController) carrierPlacementController.abort();
+    battleshipPlacementController = null;
+    carrierPlacementController = null;
+  }
+
+  const carrierButton = document.querySelector('.ships-to-place-list .carrier');
+  carrierButton.addEventListener('click', () => {
+    neutralizeShipPlacementListeners();
+    renderRotateShip();
+
+    carrierPlacementController = listenForShipPlacement(
+      boardElem,
+      'Carrier',
+      5,
+      currentShipOrientation,
+    );
+  });
+
+  const battleshipButton = document.querySelector(
+    '.ships-to-place-list .battleship',
   );
+  battleshipButton.addEventListener('click', () => {
+    neutralizeShipPlacementListeners();
+    renderRotateShip();
+
+    battleshipPlacementController = listenForShipPlacement(
+      boardElem,
+      'Battleship',
+      4,
+      currentShipOrientation,
+    );
+  });
 }
 
 function playVScomputerBtnHandler() {
