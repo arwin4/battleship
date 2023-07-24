@@ -25,18 +25,18 @@ const Gameboard = () => {
   }
 
   // Return an array of the coordinates a new ship should be placed on
-  const getShipArray = (startRow, startColumn, length, orientation) => {
+  const getShipArray = (startRow, startColumn, ship, orientation) => {
     const shipArray = [];
 
     if (orientation === 'horizontal') {
       let columnIndex = startColumn;
-      for (let i = 0; i < length; i += 1) {
+      for (let i = 0; i < ship.getLength(); i += 1) {
         shipArray.push([startRow, columnIndex]);
         columnIndex += 1;
       }
     } else {
       let rowIndex = startRow;
-      for (let i = 0; i < length; i += 1) {
+      for (let i = 0; i < ship.getLength(); i += 1) {
         shipArray.push([rowIndex, startColumn]);
         rowIndex += 1;
       }
@@ -45,9 +45,9 @@ const Gameboard = () => {
     return shipArray;
   };
 
-  const placeShip = (startRow, startColumn, name, length, orientation) => {
-    const shipArray = getShipArray(startRow, startColumn, length, orientation);
-    const ship = ShipFactory(name, length);
+  const placeShip = (startRow, startColumn, type, orientation) => {
+    const ship = ShipFactory(type);
+    const shipArray = getShipArray(startRow, startColumn, ship, orientation);
 
     // Reject placement if any location is outside bounds or occupied
     if (

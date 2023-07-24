@@ -1,90 +1,65 @@
 import Gameboard from './gameboard';
 
 describe('Placing ships', () => {
-  test(`Expect a ship with shipID 'destroyer' in the top left corner, horizontally, with length 5`, () => {
+  test(`Expect a carrier placed at [0,0] horizontally to occupy the first 5 cells in the first row, and nowhere else`, () => {
     const board1 = Gameboard();
-    board1.placeShip(0, 0, 'destroyer', 5, 'horizontal');
+    board1.placeShip(0, 0, 'carrier', 'horizontal');
     expect(board1.getBoard()[0][0]).toHaveProperty('shipPresent', true);
     expect(board1.getBoard()[0][1]).toHaveProperty('shipPresent', true);
     expect(board1.getBoard()[0][4]).toHaveProperty('shipPresent', true);
-    expect(board1.getBoard()[0][4].shipID.getName()).toBe('destroyer');
 
     expect(board1.getBoard()[0][7]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[0][9]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[2][7]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[1][0]).toHaveProperty('shipPresent', false);
   });
-
-  test(`Expect a ship with shipID 'battleship' in the third row, fourth column, vertically, with length 4`, () => {
+  test(`Expect a ship with shipID 'battleship' in the third row, fourth column, vertically`, () => {
     const board1 = Gameboard();
-    board1.placeShip(2, 3, 'battleship', 4, 'vertical');
+    board1.placeShip(2, 3, 'battleship', 'vertical');
     expect(board1.getBoard()[0][0]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[2][3]).toHaveProperty('shipPresent', true);
     expect(board1.getBoard()[3][3]).toHaveProperty('shipPresent', true);
     expect(board1.getBoard()[4][3]).toHaveProperty('shipPresent', true);
     expect(board1.getBoard()[5][3]).toHaveProperty('shipPresent', true);
-    expect(board1.getBoard()[5][3].shipID.getName()).toBe('battleship');
+    expect(board1.getBoard()[5][3].shipID.getType()).toBe('battleship');
     expect(board1.getBoard()[6][3]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[7][3]).toHaveProperty('shipPresent', false);
     expect(board1.getBoard()[7][3]).toHaveProperty('shipPresent', false);
   });
-
   test('Same ship instance is referred to across locations', () => {
     const board1 = Gameboard();
-    board1.placeShip(2, 3, 'battleship', 4, 'vertical');
+    board1.placeShip(2, 3, 'battleship', 'vertical');
     expect(board1.getBoard()[2][3].shipID).toBe(board1.getBoard()[3][3].shipID);
   });
-
-  test('Returns false when ship with length 1 is already present', () => {
+  test('Return false when placing ship on occupied location', () => {
     const testBoard = Gameboard();
-    expect(testBoard.placeShip(0, 0, 'Test ship', 1, 'horizontal')).toBe(true);
-    expect(testBoard.placeShip(0, 0, 'Test ship', 1, 'horizontal')).toBe(false);
+    expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBe(true);
+    expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBe(false);
   });
-
-  test('Returns false when ship with length 3 overlaps', () => {
-    const testBoard = Gameboard();
-    testBoard.placeShip(0, 0, 'Test ship', 3, 'horizontal');
-    expect(testBoard.placeShip(0, 1, 'Overlap vertically', 2, 'vertical')).toBe(
-      false,
-    );
-    expect(testBoard.placeShip(0, 2, 'Overlap vertically', 2, 'vertical')).toBe(
-      false,
-    );
-    expect(testBoard.placeShip(0, 0, 'Overlap vertically', 2, 'vertical')).toBe(
-      false,
-    );
-    expect(
-      testBoard.placeShip(0, 4, 'Adjacent, not overlapping', 2, 'vertical'),
-    ).toBe(true);
-  });
-
   test('Returns false when ship is placed out of column bounds', () => {
     const testBoard = Gameboard();
-    expect(testBoard.placeShip(0, -1, 'Test ship', 3, 'horizontal')).toBe(
-      false,
-    );
-    expect(testBoard.placeShip(5, 9, 'Test ship', 3, 'horizontal')).toBe(false);
+    expect(testBoard.placeShip(0, -1, 'submarine', 'horizontal')).toBe(false);
+    expect(testBoard.placeShip(5, 9, 'submarine', 'horizontal')).toBe(false);
   });
   test('Returns false when ship is placed out of row bounds', () => {
     const testBoard = Gameboard();
-    expect(testBoard.placeShip(-1, 0, 'Test ship', 3, 'horizontal')).toBe(
-      false,
-    );
-    expect(testBoard.placeShip(9, 0, 'Test ship', 3, 'vertical')).toBe(false);
+    expect(testBoard.placeShip(-1, 0, 'submarine', 'horizontal')).toBe(false);
+    expect(testBoard.placeShip(9, 0, 'submarine', 'vertical')).toBe(false);
   });
 });
 
 describe('Attacking', () => {
   test('Ship registers hit', () => {
     const board1 = Gameboard();
-    board1.placeShip(0, 0, 'poor test ship', 1, 'horizontal');
+    board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
     board1.receiveAttack(0, 0);
+    board1.receiveAttack(0, 1);
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(true);
   });
   test('Ship is sunk (only) after neccessary number of hits', () => {
     const board1 = Gameboard();
-    board1.placeShip(0, 0, 'poor test ship', 2, 'horizontal');
+    board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
     board1.receiveAttack(0, 0);
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
@@ -93,7 +68,7 @@ describe('Attacking', () => {
   });
   test('Attacking a ship in the same location twice cannot sink it', () => {
     const board1 = Gameboard();
-    board1.placeShip(0, 0, 'poor test ship', 2, 'horizontal');
+    board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
     board1.receiveAttack(0, 0);
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
@@ -104,7 +79,7 @@ describe('Attacking', () => {
   });
   test('Missed attacks are properly registered on the board', () => {
     const board1 = Gameboard();
-    board1.placeShip(0, 0, 'poor test ship', 2, 'horizontal');
+    board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[1][1].wasAttacked).toBe(false);
     board1.receiveAttack(1, 1);
     expect(board1.getBoard()[1][1].wasAttacked).toBe(true);
@@ -125,8 +100,8 @@ describe('allShipsSunk()', () => {
      */
     const board1 = Gameboard();
     expect(board1.allShipsSunk()).toBe(false);
-    board1.placeShip(0, 0, 'Test ship 1', 1, 'vertical');
-    board1.placeShip(2, 2, 'Test ship 2', 2, 'vertical');
+    board1.placeShip(0, 0, 'carrier', 'vertical');
+    board1.placeShip(2, 2, 'cruiser', 'vertical');
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(2, 2);
     expect(board1.allShipsSunk()).toBe(false);
@@ -135,8 +110,8 @@ describe('allShipsSunk()', () => {
   test('Should return false if only some ships are sunk', () => {
     const board1 = Gameboard();
     expect(board1.allShipsSunk()).toBe(false);
-    board1.placeShip(0, 0, 'poor ship', 1, 'vertical');
-    board1.placeShip(2, 2, 'poor ship', 2, 'vertical');
+    board1.placeShip(0, 0, 'carrier', 'vertical');
+    board1.placeShip(2, 2, 'destroyer', 'vertical');
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(2, 2);
     expect(board1.allShipsSunk()).toBe(false);
@@ -147,14 +122,18 @@ describe('allShipsSunk()', () => {
   test('Should return true if all ships are sunk', () => {
     const board1 = Gameboard();
     expect(board1.allShipsSunk()).toBe(false);
-    board1.placeShip(0, 0, 'Test ship 1', 1, 'vertical');
-    board1.placeShip(2, 2, 'Test ship 2', 2, 'vertical');
+    board1.placeShip(0, 0, 'destroyer', 'vertical');
+    board1.placeShip(2, 2, 'submarine', 'vertical');
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(0, 0);
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.receiveAttack(1, 0);
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(2, 2);
     expect(board1.allShipsSunk()).toBe(false);
     board1.receiveAttack(3, 2);
+    expect(board1.allShipsSunk()).toBe(false);
+    board1.receiveAttack(4, 2);
     expect(board1.allShipsSunk()).toBe(true);
   });
 });
