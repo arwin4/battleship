@@ -65,7 +65,7 @@ const Gameboard = () => {
     });
 
     ships.push(ship);
-    return true;
+    return ship;
   };
 
   const receiveAttack = (row, column) => {

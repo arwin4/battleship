@@ -33,7 +33,7 @@ describe('Placing ships', () => {
   });
   test('Return false when placing ship on occupied location', () => {
     const testBoard = Gameboard();
-    expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBe(true);
+    expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBeTruthy();
     expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBe(false);
   });
   test('Returns false when ship is placed out of column bounds', () => {

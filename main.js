@@ -10,8 +10,8 @@ function newGame() {
   player1 = game1.player1;
   player2 = game1.player2;
   // Hardcode ship placements for development
-  player1.board.placeShip(0, 0, 'ship1', 2, 'horizontal');
-  player2.board.placeShip(0, 0, 'ship1', 2, 'horizontal');
+  player1.board.placeShip(0, 0, 'destroyer', 'horizontal');
+  player2.board.placeShip(0, 0, 'destroyer', 'horizontal');
 }
 
 // DOM element getters
@@ -157,22 +157,25 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function renderShipPlacement(e, name, length) {
+function renderShipPlacement(e, type) {
   const cellInfo = getCellInfo(e);
   const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
   // Place the ship on the internal board, if valid
-  if (
-    !player1.board.placeShip(row, column, name, length, currentShipOrientation)
-  )
-    return;
+  const placedShip = player1.board.placeShip(
+    row,
+    column,
+    type,
+    currentShipOrientation,
+  );
+  if (!placedShip) return;
 
   const shipArray = player1.board.getShipArray(
     row,
     column,
-    length,
+    placedShip,
     currentShipOrientation,
   );
   shipArray.forEach((location) =>
@@ -210,15 +213,13 @@ function renderRotateShip() {
   });
 }
 
-function listenForShipPlacement(boardElem, name, length) {
+function listenForShipPlacement(boardElem, type) {
   const shipPlacementController = new AbortController();
 
   boardElem.childNodes.forEach((cell) => {
-    cell.addEventListener(
-      'click',
-      (e) => renderShipPlacement(e, name, length, currentShipOrientation),
-      { signal: shipPlacementController.signal },
-    );
+    cell.addEventListener('click', (e) => renderShipPlacement(e, type), {
+      signal: shipPlacementController.signal,
+    });
   });
   return shipPlacementController;
 }
@@ -257,12 +258,7 @@ function activateShipsToPlaceButtons() {
     neutralizeShipPlacementListeners();
     renderRotateShip();
 
-    carrierPlacementController = listenForShipPlacement(
-      boardElem,
-      'Carrier',
-      5,
-      currentShipOrientation,
-    );
+    carrierPlacementController = listenForShipPlacement(boardElem, 'carrier');
   });
 
   const battleshipButton = document.querySelector(
@@ -274,9 +270,7 @@ function activateShipsToPlaceButtons() {
 
     battleshipPlacementController = listenForShipPlacement(
       boardElem,
-      'Battleship',
-      4,
-      currentShipOrientation,
+      'battleship',
     );
   });
 
@@ -285,12 +279,7 @@ function activateShipsToPlaceButtons() {
     neutralizeShipPlacementListeners();
     renderRotateShip();
 
-    cruiserPlacementController = listenForShipPlacement(
-      boardElem,
-      'Cruiser',
-      3,
-      currentShipOrientation,
-    );
+    cruiserPlacementController = listenForShipPlacement(boardElem, 'cruiser');
   });
 
   const submarineButton = document.querySelector(
@@ -302,9 +291,7 @@ function activateShipsToPlaceButtons() {
 
     submarinePlacementController = listenForShipPlacement(
       boardElem,
-      'Submarine',
-      3,
-      currentShipOrientation,
+      'submarine',
     );
   });
 
@@ -317,9 +304,7 @@ function activateShipsToPlaceButtons() {
 
     destroyerPlacementController = listenForShipPlacement(
       boardElem,
-      'Destroyer',
-      2,
-      currentShipOrientation,
+      'destroyer',
     );
   });
 }
