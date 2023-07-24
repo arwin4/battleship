@@ -180,7 +180,7 @@ function renderShipPlacement(e, name, length) {
   );
 }
 
-function renderNewOrientationText(orientationText) {
+function renderOrientationText(orientationText) {
   const currentOrientationText = orientationText;
   if (currentShipOrientation === 'vertical') {
     currentOrientationText.textContent =
@@ -192,13 +192,11 @@ function renderNewOrientationText(orientationText) {
 }
 
 function renderRotateShip() {
-  // FIXME: When the current orientation is vertical, picking a new ship renders the text 'placing horizontally' instead of vertically.
   const orientationContainer = document.querySelector('.orientation');
   orientationContainer.replaceChildren();
 
   const orientationText = document.createElement('p');
-  orientationText.textContent =
-    'Currently placing the ship horizontally from the cell of your choosing...';
+  renderOrientationText(orientationText);
   orientationContainer.appendChild(orientationText);
 
   const toggleOrientationBtn = document.createElement('button');
@@ -208,7 +206,7 @@ function renderRotateShip() {
   toggleOrientationBtn.addEventListener('click', () => {
     currentShipOrientation =
       currentShipOrientation === 'horizontal' ? 'vertical' : 'horizontal';
-    renderNewOrientationText(orientationText);
+    renderOrientationText(orientationText);
   });
 }
 
