@@ -1,38 +1,66 @@
 import ShipFactory from './ship';
 
-test('Ship with different lengths are only sunk after the expected amount of hits', () => {
-  const ship1 = ShipFactory('ship1', 1);
-  expect(ship1.isSunk()).toBe(false);
+describe('Ship with different lengths are only sunk after the expected amount of hits', () => {
+  test('Carrier (length 5) should only sink after 5 hits', () => {
+    const carrier = ShipFactory('carrier');
+    expect(carrier.isSunk()).toBe(false);
+    carrier.hit();
+    expect(carrier.isSunk()).toBe(false);
+    carrier.hit();
+    expect(carrier.isSunk()).toBe(false);
+    carrier.hit();
+    expect(carrier.isSunk()).toBe(false);
+    carrier.hit();
+    expect(carrier.isSunk()).toBe(false);
+    carrier.hit();
+    expect(carrier.isSunk()).toBe(true);
+  });
 
-  const ship2 = ShipFactory('ship2', 1);
-  expect(ship2.isSunk()).toBe(false);
-  ship2.hit(); // Should sink here
-  expect(ship2.isSunk()).toBe(true);
-
-  const ship3 = ShipFactory('ship3', 2);
-  expect(ship3.isSunk()).toBe(false);
-  ship3.hit();
-  expect(ship3.isSunk()).toBe(false);
-  ship3.hit(); // Should sink here
-  expect(ship3.isSunk()).toBe(true);
-
-  const ship4 = ShipFactory('ship4', 3);
-  expect(ship4.isSunk()).toBe(false);
-  ship4.hit();
-  expect(ship4.isSunk()).toBe(false);
-  ship4.hit();
-  expect(ship4.isSunk()).toBe(false);
-  ship4.hit(); // Should sink here
-  expect(ship4.isSunk()).toBe(true);
+  test('Destroyer (length 2) should only sink after 2 hits', () => {
+    const destroyer = ShipFactory('destroyer');
+    expect(destroyer.isSunk()).toBe(false);
+    destroyer.hit();
+    expect(destroyer.isSunk()).toBe(false);
+    destroyer.hit();
+    expect(destroyer.isSunk()).toBe(true);
+  });
 });
 
 test('Ship continues to be sunk even it continues to get hit', () => {
-  const ship3 = ShipFactory('ship3', 2);
-  expect(ship3.isSunk()).toBe(false);
-  ship3.hit();
-  expect(ship3.isSunk()).toBe(false);
-  ship3.hit();
-  expect(ship3.isSunk()).toBe(true);
-  ship3.hit(); // Was already sunk
-  expect(ship3.isSunk()).toBe(true);
+  const destroyer = ShipFactory('destroyer');
+  expect(destroyer.isSunk()).toBe(false);
+  destroyer.hit();
+  expect(destroyer.isSunk()).toBe(false);
+  destroyer.hit(); // Sinks now
+  expect(destroyer.isSunk()).toBe(true);
+  destroyer.hit(); // Was already sunk
+  expect(destroyer.isSunk()).toBe(true);
+});
+
+describe('Ship types', () => {
+  test('Ship of type carrier should have length 5', () => {
+    const newShip = ShipFactory('carrier');
+    expect(newShip.getLength()).toBe(5);
+  });
+  test('Ship of type battleship should have length 4', () => {
+    const newShip = ShipFactory('battleship');
+    expect(newShip.getLength()).toBe(4);
+  });
+  test('Ship of type cruiser should have length 3', () => {
+    const newShip = ShipFactory('cruiser');
+    expect(newShip.getLength()).toBe(3);
+  });
+  test('Ship of type submarine should have length 3', () => {
+    const newShip = ShipFactory('submarine');
+    expect(newShip.getLength()).toBe(3);
+  });
+  test('Ship of type destroyer should have length 2', () => {
+    const newShip = ShipFactory('destroyer');
+    expect(newShip.getLength()).toBe(2);
+  });
+  test('Ship of type tugboat is an invalid type and should throw an error', () => {
+    expect(() => {
+      const newShip = ShipFactory('tugboat');
+    }).toThrow();
+  });
 });
