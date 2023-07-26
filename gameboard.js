@@ -45,16 +45,21 @@ const Gameboard = () => {
     return shipArray;
   };
 
+  const checkShipOutsideBounds = (shipArray) =>
+    shipArray.some(([row, column]) => !board[row]?.[column]);
+
+  const checkLocationOccupied = (shipArray) =>
+    shipArray.some(([row, column]) => board[row][column].shipPresent);
+
   const placeShip = (startRow, startColumn, type, orientation) => {
     const ship = ShipFactory(type);
     const shipArray = getShipArray(startRow, startColumn, ship, orientation);
 
-    // Reject placement if any location is outside bounds or occupied
+    // TODO: Reject placement if ship type limit reached
+    // checkShipLimitReached(ship)
     if (
-      shipArray.some(
-        ([row, column]) =>
-          !board[row]?.[column] || board[row][column].shipPresent,
-      )
+      checkShipOutsideBounds(shipArray, board) ||
+      checkLocationOccupied(shipArray, board)
     )
       return false;
 
