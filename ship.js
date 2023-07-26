@@ -22,11 +22,24 @@ const ShipFactory = (type) => {
     hits += 1;
   };
 
+  let locations;
+  const setShipLocations = (newLocations) => {
+    locations = newLocations;
+  };
+  const getShipLocations = () => locations;
+
   const getType = () => type;
   const getLength = () => length;
   const isSunk = () => hits >= length;
 
-  return { hit, isSunk, getType, getLength };
+  return {
+    hit,
+    isSunk,
+    getType,
+    getLength,
+    setShipLocations,
+    getShipLocations,
+  };
 };
 
 export default ShipFactory;
