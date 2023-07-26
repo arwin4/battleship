@@ -51,15 +51,33 @@ const Gameboard = () => {
   const checkLocationOccupied = (shipArray) =>
     shipArray.some(([row, column]) => board[row][column].shipPresent);
 
+  const checkShipTypeLimitReached = (shipToCheck) => {
+    const typeLimits = {
+      carrier: 1,
+      battleship: 1,
+      cruiser: 1,
+      submarine: 1,
+      destroyer: 1,
+    };
+
+    const type = shipToCheck.getType();
+
+    let numberOfThisTypeAlreadyPresent = 0;
+    ships.forEach((ship) => {
+      if (ship.getType() === type) numberOfThisTypeAlreadyPresent += 1;
+    });
+
+    return numberOfThisTypeAlreadyPresent >= typeLimits[type];
+  };
+
   const placeShip = (startRow, startColumn, type, orientation) => {
     const ship = ShipFactory(type);
     const shipArray = getShipArray(startRow, startColumn, ship, orientation);
 
-    // TODO: Reject placement if ship type limit reached
-    // checkShipLimitReached(ship)
     if (
       checkShipOutsideBounds(shipArray, board) ||
-      checkLocationOccupied(shipArray, board)
+      checkLocationOccupied(shipArray, board) ||
+      checkShipTypeLimitReached(ship)
     )
       return false;
 

@@ -46,6 +46,31 @@ describe('Placing ships', () => {
     expect(testBoard.placeShip(-1, 0, 'submarine', 'horizontal')).toBe(false);
     expect(testBoard.placeShip(9, 0, 'submarine', 'vertical')).toBe(false);
   });
+  test('Returns false when placing carrier, while a carrier has already been placed', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'carrier', 'horizontal')).toBeTruthy();
+    expect(testBoard.placeShip(1, 0, 'carrier', 'horizontal')).toBeFalsy();
+  });
+  test('Returns false when placing battleship, while a battleship has already been placed', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'battleship', 'horizontal')).toBeTruthy();
+    expect(testBoard.placeShip(1, 0, 'battleship', 'horizontal')).toBeFalsy();
+  });
+  test('Returns false when placing cruiser, while a cruiser has already been placed', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'cruiser', 'horizontal')).toBeTruthy();
+    expect(testBoard.placeShip(1, 0, 'cruiser', 'horizontal')).toBeFalsy();
+  });
+  test('Returns false when placing submarine, while a submarine has already been placed', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'submarine', 'horizontal')).toBeTruthy();
+    expect(testBoard.placeShip(1, 0, 'submarine', 'horizontal')).toBeFalsy();
+  });
+  test('Returns false when placing destroyer, while a destroyer has already been placed', () => {
+    const testBoard = Gameboard();
+    expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBeTruthy();
+    expect(testBoard.placeShip(1, 0, 'destroyer', 'horizontal')).toBeFalsy();
+  });
 });
 
 describe('Attacking', () => {
