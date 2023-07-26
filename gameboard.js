@@ -6,7 +6,7 @@ const Gameboard = () => {
    * This allows for easier and quicker access to ship data than by going over
    * the board array.
    */
-  const ships = [];
+  let ships = [];
 
   const locationProperties = {
     shipPresent: false,
@@ -87,8 +87,24 @@ const Gameboard = () => {
       board[row][column].shipID = ship;
     });
 
+    ship.setShipLocations(shipArray);
     ships.push(ship);
+
     return ship;
+  };
+
+  const removeShip = (row, column) => {
+    const ship = board[row][column].shipID;
+    const shipLocations = ship.getShipLocations();
+
+    ships = ships.filter((shipInArray) => shipInArray !== ship);
+
+    ship.setShipLocations(null);
+
+    shipLocations.forEach(([boardRow, boardColumn]) => {
+      board[boardRow][boardColumn].shipPresent = false;
+      board[boardRow][boardColumn].shipID = undefined;
+    });
   };
 
   const receiveAttack = (row, column) => {
@@ -114,7 +130,14 @@ const Gameboard = () => {
 
   const getBoard = () => board;
 
-  return { getBoard, placeShip, receiveAttack, allShipsSunk, getShipArray };
+  return {
+    getBoard,
+    placeShip,
+    removeShip,
+    receiveAttack,
+    allShipsSunk,
+    getShipArray,
+  };
 };
 
 export default Gameboard;
