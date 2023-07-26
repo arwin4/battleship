@@ -217,11 +217,13 @@ function listenForShipPlacement(player, boardElem, type) {
   const shipPlacementController = new AbortController();
 
   boardElem.childNodes.forEach((cell) => {
-    cell.addEventListener(
-      'click',
-      (e) => renderShipPlacement(e, type, player),
-      { signal: shipPlacementController.signal },
-    );
+    if (cell.className !== 'ship-present') {
+      cell.addEventListener(
+        'click',
+        (e) => renderShipPlacement(e, type, player),
+        { signal: shipPlacementController.signal },
+      );
+    }
   });
   return shipPlacementController;
 }
