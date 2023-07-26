@@ -157,14 +157,14 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function renderShipPlacement(e, type) {
+function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
   const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
   // Place the ship on the internal board, if valid
-  const placedShip = player1.board.placeShip(
+  const placedShip = player.board.placeShip(
     row,
     column,
     type,
@@ -172,7 +172,7 @@ function renderShipPlacement(e, type) {
   );
   if (!placedShip) return;
 
-  const shipArray = player1.board.getShipArray(
+  const shipArray = player.board.getShipArray(
     row,
     column,
     placedShip,
@@ -213,21 +213,20 @@ function renderRotateShip() {
   });
 }
 
-function listenForShipPlacement(boardElem, type) {
+function listenForShipPlacement(player, boardElem, type) {
   const shipPlacementController = new AbortController();
 
   boardElem.childNodes.forEach((cell) => {
-    cell.addEventListener('click', (e) => renderShipPlacement(e, type), {
-      signal: shipPlacementController.signal,
-    });
+    cell.addEventListener(
+      'click',
+      (e) => renderShipPlacement(e, type, player),
+      { signal: shipPlacementController.signal },
+    );
   });
   return shipPlacementController;
 }
 
-function activateShipsToPlaceButtons() {
-  // TODO: deactivate once this ship has been placed
-  const boardElem = primaryBoard1;
-
+function activateShipsToPlaceButtons(boardElem, player) {
   let carrierPlacementController = null;
   let battleshipPlacementController = null;
   let cruiserPlacementController = null;
@@ -258,7 +257,11 @@ function activateShipsToPlaceButtons() {
     neutralizeShipPlacementListeners();
     renderRotateShip();
 
-    carrierPlacementController = listenForShipPlacement(boardElem, 'carrier');
+    carrierPlacementController = listenForShipPlacement(
+      player,
+      boardElem,
+      'carrier',
+    );
   });
 
   const battleshipButton = document.querySelector(
@@ -269,6 +272,7 @@ function activateShipsToPlaceButtons() {
     renderRotateShip();
 
     battleshipPlacementController = listenForShipPlacement(
+      player,
       boardElem,
       'battleship',
     );
@@ -279,7 +283,11 @@ function activateShipsToPlaceButtons() {
     neutralizeShipPlacementListeners();
     renderRotateShip();
 
-    cruiserPlacementController = listenForShipPlacement(boardElem, 'cruiser');
+    cruiserPlacementController = listenForShipPlacement(
+      player,
+      boardElem,
+      'cruiser',
+    );
   });
 
   const submarineButton = document.querySelector(
@@ -290,6 +298,7 @@ function activateShipsToPlaceButtons() {
     renderRotateShip();
 
     submarinePlacementController = listenForShipPlacement(
+      player,
       boardElem,
       'submarine',
     );
@@ -303,6 +312,7 @@ function activateShipsToPlaceButtons() {
     renderRotateShip();
 
     destroyerPlacementController = listenForShipPlacement(
+      player,
       boardElem,
       'destroyer',
     );
@@ -319,7 +329,7 @@ function playVScomputerBtnHandler() {
   player2boards.classList.add('hidden');
   trackingBoard1.classList.add('hidden');
   primaryBoard1.after(shipsToPlace);
-  activateShipsToPlaceButtons();
+  activateShipsToPlaceButtons(primaryBoard1, player1);
 }
 
 function activateButtons() {
