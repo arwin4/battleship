@@ -27,7 +27,7 @@ const Player = () => {
     return Math.floor(Math.random() * (maxNum - minNum + 1) + minNum);
   };
 
-  const placeShipsRandomly = () => {
+  const placeAllShipsRandomly = () => {
     const shipTypes = board.getShipTypes();
     Object.entries(shipTypes).forEach((type) => {
       let needToTryAnotherPlacement = false;
@@ -99,7 +99,7 @@ const Player = () => {
 
   return {
     board,
-    placeShipsRandomly,
+    placeAllShipsRandomly,
     attackRandom,
     turn,
     getCurrentTurnNumber,
