@@ -93,7 +93,7 @@ const Player = () => {
 
   const attackRandom = (opponent) => {
     const move = randomMove();
-    opponent.board.receiveAttack(move[0], move[1]);
+    attack(opponent, move[0], move[1]);
     return move;
   };
 
