@@ -22,3 +22,15 @@ describe('attack()', () => {
     expect(player1.turn).toBe(false);
   });
 });
+
+describe('placeShipsRandomly', () => {
+  test('After running, ship list length should match expected number of 1 per ship, or more if ship limit was increased', () => {
+    const player1 = Player();
+    player1.placeShipsRandomly();
+    if (player1.board.getShipTypes().destroyer.limit === 5) {
+      expect(player1.board.getShips().length).toBe(9);
+    } else if (player1.board.getShipTypes().destroyer.limit === 1) {
+      expect(player1.board.getShips().length).toBe(5);
+    }
+  });
+});
