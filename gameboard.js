@@ -1,13 +1,6 @@
 import ShipFactory from './ship.js';
 
 const Gameboard = () => {
-  /**
-   * Keep an array of all ships. Sunk ships remain on the array.
-   * This allows for easier and quicker access to ship data than by going over
-   * the board array.
-   */
-  let ships = [];
-
   const locationProperties = {
     shipPresent: false,
     shipID: undefined,
@@ -23,6 +16,23 @@ const Gameboard = () => {
       board[i].push({ ...locationProperties });
     }
   }
+
+  /**
+   * Keep an array of all ships. Sunk ships remain on the array.
+   * This allows for easier and quicker access to ship data than by going over
+   * the board array.
+   */
+  let ships = [];
+
+  const shipTypes = {
+    carrier: { limit: 1 },
+    battleship: { limit: 1 },
+    cruiser: { limit: 1 },
+    submarine: { limit: 1 },
+    destroyer: { limit: 1 },
+  };
+
+  const getShipTypes = () => shipTypes;
 
   // Return an array of the coordinates a new ship should be placed on
   const getShipArray = (startRow, startColumn, ship, orientation) => {
@@ -52,14 +62,6 @@ const Gameboard = () => {
     shipArray.some(([row, column]) => board[row][column].shipPresent);
 
   const checkShipTypeLimitReached = (shipToCheck) => {
-    const typeLimits = {
-      carrier: 1,
-      battleship: 1,
-      cruiser: 1,
-      submarine: 1,
-      destroyer: 1,
-    };
-
     const type = shipToCheck.getType();
 
     let numberOfThisTypeAlreadyPresent = 0;
@@ -67,7 +69,7 @@ const Gameboard = () => {
       if (ship.getType() === type) numberOfThisTypeAlreadyPresent += 1;
     });
 
-    return numberOfThisTypeAlreadyPresent >= typeLimits[type];
+    return numberOfThisTypeAlreadyPresent >= shipTypes[type].limit;
   };
 
   const placeShip = (startRow, startColumn, type, orientation) => {
@@ -132,6 +134,7 @@ const Gameboard = () => {
 
   return {
     getBoard,
+    getShipTypes,
     placeShip,
     removeShip,
     receiveAttack,
