@@ -23,6 +23,7 @@ const Gameboard = () => {
    * the board array.
    */
   let ships = [];
+  const getShips = () => ships;
 
   const shipTypes = {
     carrier: { limit: 1 },
@@ -134,6 +135,7 @@ const Gameboard = () => {
 
   return {
     getBoard,
+    getShips,
     getShipTypes,
     placeShip,
     removeShip,

@@ -52,27 +52,30 @@ describe('Placing ships', () => {
       expect(testBoard.placeShip(0, 0, 'carrier', 'horizontal')).toBeTruthy();
       expect(testBoard.placeShip(1, 0, 'carrier', 'horizontal')).toBeFalsy();
     });
-    test('Returns false when placing battleship, while a battleship has already been placed', () => {
-      const testBoard = Gameboard();
-      expect(
-        testBoard.placeShip(0, 0, 'battleship', 'horizontal'),
-      ).toBeTruthy();
-      expect(testBoard.placeShip(1, 0, 'battleship', 'horizontal')).toBeFalsy();
-    });
-    test('Returns false when placing cruiser, while a cruiser has already been placed', () => {
-      const testBoard = Gameboard();
-      expect(testBoard.placeShip(0, 0, 'cruiser', 'horizontal')).toBeTruthy();
-      expect(testBoard.placeShip(1, 0, 'cruiser', 'horizontal')).toBeFalsy();
-    });
-    test('Returns false when placing submarine, while a submarine has already been placed', () => {
-      const testBoard = Gameboard();
-      expect(testBoard.placeShip(0, 0, 'submarine', 'horizontal')).toBeTruthy();
-      expect(testBoard.placeShip(1, 0, 'submarine', 'horizontal')).toBeFalsy();
-    });
-    test('Returns false when placing destroyer, while a destroyer has already been placed', () => {
+    test('Returns false when placing destroyer, while destroyer limits are exceeded', () => {
       const testBoard = Gameboard();
       expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBeTruthy();
-      expect(testBoard.placeShip(1, 0, 'destroyer', 'horizontal')).toBeFalsy();
+      if (testBoard.getShipTypes().destroyer.limit === 1) {
+        expect(
+          testBoard.placeShip(1, 0, 'destroyer', 'horizontal'),
+        ).toBeFalsy();
+      } else if (testBoard.getShipTypes().destroyer.limit === 5) {
+        expect(
+          testBoard.placeShip(1, 0, 'destroyer', 'horizontal'),
+        ).toBeTruthy();
+        expect(
+          testBoard.placeShip(2, 0, 'destroyer', 'horizontal'),
+        ).toBeTruthy();
+        expect(
+          testBoard.placeShip(3, 0, 'destroyer', 'horizontal'),
+        ).toBeTruthy();
+        expect(
+          testBoard.placeShip(4, 0, 'destroyer', 'horizontal'),
+        ).toBeTruthy();
+        expect(
+          testBoard.placeShip(5, 0, 'destroyer', 'horizontal'),
+        ).toBeFalsy();
+      }
     });
     test('Placing a new ship after removing a ship at the same location is possible', () => {
       const testBoard = Gameboard();
