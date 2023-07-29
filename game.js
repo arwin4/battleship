@@ -32,9 +32,7 @@ const game = () => {
    * Return the attack if it was made by an AI player
    */
   const handleAttack = (player, row, column) => {
-    // Deny attack if it's not that player's turn
     if (!player.turn) return false;
-    // Deny attack if game is over
     if (isGameOver()) return false;
 
     // Find out who is making this move and assign their opponent
