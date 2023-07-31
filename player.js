@@ -70,6 +70,7 @@ const Player = () => {
 
   const AIAttack = (opponent) => {
     let needAnotherMove = false;
+    let move;
 
     do {
       let row;
@@ -82,6 +83,7 @@ const Player = () => {
        */
       if (true) {
         [row, column] = getRandomMove();
+        move = [row, column];
       }
 
       /**
@@ -101,6 +103,8 @@ const Player = () => {
         needAnotherMove = true;
       }
     } while (needAnotherMove);
+
+    return move;
   };
 
   return {

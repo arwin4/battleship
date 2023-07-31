@@ -119,6 +119,8 @@ function handleAttackClick(e) {
   // Update the board again if the AI has also made a move
   if (!opponent.isHuman()) {
     setTimeout(
+      // FIXME: this function is being passed old arguments that no longer work.
+      // Find a way to pass along fabricated cellInfo, or refactor the function.
       () => updateBoardsAfterAttack(opponent, attack[0], attack[1]),
       500,
     );
