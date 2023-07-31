@@ -49,7 +49,7 @@ const game = () => {
     // Have opponent make their move if it's an AI.
     // (Only player 2 should be made an AI.)
     if (!opponent.isHuman()) {
-      const attack = opponent.attackRandom(currentPlayer);
+      const attack = opponent.AIAttack(currentPlayer);
       opponent.turn = false;
       currentPlayer.turn = true;
       opponent.addTurn();

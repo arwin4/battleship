@@ -19,7 +19,7 @@ const Player = () => {
 
   const turn = false;
   const board = Gameboard();
-  const previousRandomMoves = [];
+  const previousMoves = [];
 
   const getRandomIntInclusive = (min, max) => {
     const minNum = Math.ceil(min);
@@ -56,34 +56,11 @@ const Player = () => {
     });
   };
 
-  const randomMove = () => {
-    let needAnotherMove = false;
-    let newMove;
+  const getRandomMove = () => {
+    const randomRow = getRandomIntInclusive(0, 9);
+    const randomColumn = getRandomIntInclusive(0, 9);
 
-    do {
-      const randomRow = getRandomIntInclusive(0, 9);
-      const randomColumn = getRandomIntInclusive(0, 9);
-      newMove = [randomRow, randomColumn];
-
-      /**
-       * Compare the rolled move against the previously made ones.
-       * Map the moves to strings to allow filtering.
-       */
-      const previouslyMadeMove = previousRandomMoves
-        .map((oldMove) => JSON.stringify(oldMove))
-        .filter((oldMove) => oldMove === `[${randomRow},${randomColumn}]`);
-
-      if (previouslyMadeMove.length === 0) {
-        // Move wasn't made before
-        previousRandomMoves.push(newMove);
-        needAnotherMove = false;
-      } else {
-        // Move was made before, roll another
-        needAnotherMove = true;
-      }
-    } while (needAnotherMove);
-
-    return newMove;
+    return [randomRow, randomColumn];
   };
 
   const attack = (opponent, row, column) => {
@@ -91,16 +68,45 @@ const Player = () => {
     return true;
   };
 
-  const attackRandom = (opponent) => {
-    const move = randomMove();
-    attack(opponent, move[0], move[1]);
-    return move;
+  const AIAttack = (opponent) => {
+    let needAnotherMove = false;
+
+    do {
+      let row;
+      let column;
+
+      /**
+       * TODO:
+       * If previous move was a miss || If no previous moves were made -> get a random move
+       * Else (if previous move was a hit) -> get a 'smart' move
+       */
+      if (true) {
+        [row, column] = getRandomMove();
+      }
+
+      /**
+       * Compare the rolled move against the previously made ones.
+       * Map the moves to strings to allow filtering.
+       */
+      const previouslyMadeMove = previousMoves
+        .map((oldMove) => JSON.stringify(oldMove))
+        .filter((oldMove) => oldMove === `[${row},${column}]`);
+
+      if (previouslyMadeMove.length === 0) {
+        // Move wasn't made before
+        needAnotherMove = false;
+        attack(opponent, row, column);
+      } else {
+        // Move was made before, roll another
+        needAnotherMove = true;
+      }
+    } while (needAnotherMove);
   };
 
   return {
     board,
     placeAllShipsRandomly,
-    attackRandom,
+    AIAttack,
     turn,
     getCurrentTurnNumber,
     addTurn,

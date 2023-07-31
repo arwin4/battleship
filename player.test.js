@@ -18,7 +18,7 @@ describe('attack()', () => {
     const player1 = Player();
     const player2 = Player();
     player1.makeAI();
-    player1.attackRandom(player2);
+    player1.AIAttack(player2);
     expect(player1.turn).toBe(false);
   });
 });
