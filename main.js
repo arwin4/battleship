@@ -90,20 +90,12 @@ function updateBoardsAfterAttack(cellInfo, opponent) {
   // Get the board with the cell whose status has changed
   const boardCells = opponent.board.getBoard();
 
-  if (
-    boardCells[row][column].wasAttacked &&
-    !boardCells[row][column].shipPresent
-  ) {
-    updateCellStyle(boardClassName, row, column, 'miss');
-    updateCellStyle(opponentBoardClassName, row, column, 'miss');
-  }
-
-  if (
-    boardCells[row][column].shipPresent &&
-    boardCells[row][column].wasAttacked
-  ) {
+  if (boardCells[row][column].attackHit) {
     updateCellStyle(boardClassName, row, column, 'hit');
     updateCellStyle(opponentBoardClassName, row, column, 'hit');
+  } else {
+    updateCellStyle(boardClassName, row, column, 'miss');
+    updateCellStyle(opponentBoardClassName, row, column, 'miss');
   }
 }
 

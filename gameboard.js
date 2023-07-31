@@ -4,7 +4,7 @@ const Gameboard = () => {
   const locationProperties = {
     shipPresent: false,
     shipID: undefined,
-    attackMissed: false,
+    attackHit: false,
     wasAttacked: false,
   };
 
@@ -120,9 +120,9 @@ const Gameboard = () => {
 
     if (attackedLocation.shipPresent) {
       attackedLocation.shipID.hit();
-    } else {
-      attackedLocation.attackMissed = true;
+      attackedLocation.attackHit = true;
     }
+
     return true;
   };
 
