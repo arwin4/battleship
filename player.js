@@ -97,6 +97,7 @@ const Player = () => {
       if (previouslyMadeMove.length === 0) {
         // Move wasn't made before
         needAnotherMove = false;
+        previousMoves.push(move);
         attack(opponent, row, column);
       } else {
         // Move was made before, roll another
