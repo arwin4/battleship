@@ -14,13 +14,6 @@ describe('attack()', () => {
     player1.makeAI();
     expect(player1.isHuman()).toBe(false);
   });
-  test('player1 (ai) attack causes turn to flip', () => {
-    const player1 = Player();
-    const player2 = Player();
-    player1.makeAI();
-    player1.AIAttack(player2);
-    expect(player1.turn).toBe(false);
-  });
 });
 
 describe('placeShipsRandomly', () => {

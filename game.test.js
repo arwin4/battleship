@@ -97,6 +97,8 @@ describe('AI', () => {
     const testGame = game();
     const player1 = testGame.player1;
     const player2 = testGame.player2;
+    expect(player1.turn).toBe(true);
+    expect(player2.turn).toBe(false);
     player2.makeAI();
     testGame.handleAttack(player1, 0, 0);
     expect(player1.turn).toBe(true);
