@@ -9,7 +9,9 @@ function newGame() {
   game1 = game();
   player1 = game1.player1;
   player2 = game1.player2;
+  player2.makeAI();
   player2.placeAllShipsRandomly();
+  player1.placeAllShipsRandomly();
 }
 
 // DOM element getters
@@ -80,8 +82,7 @@ function getCellInfo(e) {
   return { row, column, boardElem, boardClassName, opponentBoardClassName };
 }
 
-// Update the style of a cell whose status has changed, on both the primary and tracking board
-function updateBoardsAfterAttack(cellInfo, opponent) {
+function updateBoardsAfterUserAttack(cellInfo, opponent) {
   const { row } = cellInfo;
   const { column } = cellInfo;
   const { boardClassName } = cellInfo;
@@ -96,6 +97,19 @@ function updateBoardsAfterAttack(cellInfo, opponent) {
   } else {
     updateCellStyle(boardClassName, row, column, 'miss');
     updateCellStyle(opponentBoardClassName, row, column, 'miss');
+  }
+}
+
+function updateBoardsAfterAIAttack(attack, currentPlayer) {
+  const [row, column] = attack;
+
+  const boardCells = currentPlayer.board.getBoard();
+  if (boardCells[row][column].attackHit) {
+    updateCellStyle('player-1-primary', row, column, 'hit');
+    updateCellStyle('player-2-tracking', row, column, 'hit');
+  } else {
+    updateCellStyle('player-1-primary', row, column, 'miss');
+    updateCellStyle('player-2-tracking', row, column, 'miss');
   }
 }
 
@@ -114,16 +128,11 @@ function handleAttackClick(e) {
   const attack = game1.handleAttack(currentPlayer, row, column);
   if (!attack) return;
 
-  updateBoardsAfterAttack(cellInfo, opponent);
+  updateBoardsAfterUserAttack(cellInfo, opponent);
 
   // Update the board again if the AI has also made a move
   if (!opponent.isHuman()) {
-    setTimeout(
-      // FIXME: this function is being passed old arguments that no longer work.
-      // Find a way to pass along fabricated cellInfo, or refactor the function.
-      () => updateBoardsAfterAttack(opponent, attack[0], attack[1]),
-      500,
-    );
+    setTimeout(() => updateBoardsAfterAIAttack(attack, currentPlayer), 500);
   }
 }
 
