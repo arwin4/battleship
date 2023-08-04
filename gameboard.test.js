@@ -84,6 +84,14 @@ describe('Placing ships', () => {
       expect(testBoard.placeShip(0, 0, 'destroyer', 'horizontal')).toBeTruthy();
     });
   });
+  describe('Ships should not touch', () => {
+    test('Ship placement touching ship should be disallowed', () => {
+      const testBoard = Gameboard();
+      testBoard.placeShip(2, 2, 'submarine', 'horizontal');
+      expect(testBoard.placeShip(3, 2, 'destroyer', 'horizontal')).toBeFalsy();
+      expect(testBoard.placeShip(3, 2, 'destroyer', 'horizontal')).toBeFalsy();
+    });
+  });
 });
 
 describe('Removing ships', () => {

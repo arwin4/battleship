@@ -73,14 +73,47 @@ const Gameboard = () => {
     return numberOfThisTypeAlreadyPresent >= shipTypes[type].limit;
   };
 
+  const getValidSurroundingCells = (row, column) => {
+    const adjacentCells = [];
+    adjacentCells.push(
+      [row - 1, column - 1],
+      [row - 1, column],
+      [row - 1, column + 1],
+      [row, column - 1],
+      [row, column + 1],
+      [row + 1, column - 1],
+      [row + 1, column],
+      [row + 1, column + 1],
+    );
+
+    return adjacentCells.filter(
+      (cell) => cell[0] >= 0 && cell[0] <= 9 && cell[1] >= 0 && cell[1] <= 9,
+    );
+  };
+
+  /**
+   * Return true if a new ship would be placed adjacent to an existing ship.
+   * Ships must have one unoccupied cell between them, including diagonals.
+   */
+  const checkShipsTouching = (shipArray) =>
+    shipArray.some((cell) => {
+      const [row, column] = cell;
+      const surroundingCells = getValidSurroundingCells(row, column);
+      return surroundingCells.some((surroundingCell) => {
+        const [surroundingRow, surroundingColumn] = surroundingCell;
+        return board[surroundingRow][surroundingColumn].shipPresent;
+      });
+    });
+
   const placeShip = (startRow, startColumn, type, orientation) => {
     const ship = ShipFactory(type);
     const shipArray = getShipArray(startRow, startColumn, ship, orientation);
 
     if (
-      checkShipOutsideBounds(shipArray, board) ||
-      checkLocationOccupied(shipArray, board) ||
-      checkShipTypeLimitReached(ship)
+      checkShipOutsideBounds(shipArray) ||
+      checkLocationOccupied(shipArray) ||
+      checkShipTypeLimitReached(ship) ||
+      checkShipsTouching(shipArray)
     )
       return false;
 
