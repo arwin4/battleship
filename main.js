@@ -1,5 +1,14 @@
 import game from './game.js';
 
+window.onerror = (message, url, line, col) => {
+  // eslint-disable-next-line no-alert
+  alert(
+    `${message}\n At ${line}:${col} of ${url}. 
+
+Please inform the author if you see this! This shouldn't happen.`,
+  );
+};
+
 let game1;
 let player1;
 let player2;
@@ -114,6 +123,7 @@ function updateBoardsAfterAIAttack(attack, currentPlayer) {
 }
 
 function handleAttackClick(e) {
+  // TODO: disable click handler for already attacked cells
   const cellInfo = getCellInfo(e);
   const { boardClassName } = cellInfo;
   const { row } = cellInfo;
