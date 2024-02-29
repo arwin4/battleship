@@ -146,8 +146,9 @@ const Gameboard = () => {
   const receiveAttack = (row, column) => {
     const attackedLocation = board[row][column];
 
-    // Ignore multiple attacks on same location
-    if (attackedLocation.wasAttacked) return false;
+    // Throw error when a location is attacked more than once
+    if (attackedLocation.wasAttacked)
+      throw new Error('Location was already attacked');
 
     attackedLocation.wasAttacked = true;
 
@@ -156,7 +157,9 @@ const Gameboard = () => {
       attackedLocation.attackHit = true;
     }
 
-    return true;
+    if (attackedLocation.shipID?.isSunk()) return { isShipSunk: true };
+
+    return { isShipSunk: false };
   };
 
   const allShipsSunk = () => {

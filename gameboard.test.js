@@ -119,40 +119,35 @@ describe('Removing ships', () => {
 });
 
 describe('Attacking', () => {
-  test('Ship registers hit', () => {
+  test('Board registers hit', () => {
     const board1 = Gameboard();
     board1.placeShip(0, 0, 'destroyer', 'horizontal');
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
+    expect(board1.getBoard()[0][0].wasAttacked).toBe(false);
     board1.receiveAttack(0, 0);
-    board1.receiveAttack(0, 1);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(true);
+    expect(board1.getBoard()[0][0].wasAttacked).toBe(true);
   });
   test('Ship is sunk (only) after neccessary number of hits', () => {
     const board1 = Gameboard();
     board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
-    board1.receiveAttack(0, 0);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
-    board1.receiveAttack(0, 1);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(true);
+    const attack1 = board1.receiveAttack(0, 0);
+    expect(attack1.isShipSunk).toBe(false);
+    const attack2 = board1.receiveAttack(0, 1);
+    expect(attack2.isShipSunk).toBe(true);
   });
-  test('Attacking a ship in the same location twice cannot sink it', () => {
+  test('Attacking a ship in the same location twice throws an error', () => {
     const board1 = Gameboard();
     board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
     board1.receiveAttack(0, 0);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
-    board1.receiveAttack(0, 0);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(false);
-    board1.receiveAttack(0, 1);
-    expect(board1.getBoard()[0][0].shipID.isSunk()).toBe(true);
+    expect(() => board1.receiveAttack(0, 0)).toThrow(
+      'Location was already attacked',
+    );
   });
   test('Missed attacks are properly registered on the board', () => {
     const board1 = Gameboard();
     board1.placeShip(0, 0, 'destroyer', 'horizontal');
     expect(board1.getBoard()[1][1].wasAttacked).toBe(false);
-    board1.receiveAttack(1, 1);
-    expect(board1.getBoard()[1][1].wasAttacked).toBe(true);
     board1.receiveAttack(1, 1);
     expect(board1.getBoard()[1][1].wasAttacked).toBe(true);
   });

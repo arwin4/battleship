@@ -30,16 +30,6 @@ describe('Turns', () => {
     expect(player1).toHaveProperty('turn', false);
     expect(player2).toHaveProperty('turn', true);
   });
-  test('Turn does not flip if same location is attacked again', () => {
-    const testGame = game();
-    const player1 = testGame.player1;
-    const player2 = testGame.player2;
-    testGame.handleAttack(player1, 0, 0);
-    testGame.handleAttack(player2, 0, 0);
-    expect(player1).toHaveProperty('turn', true);
-    testGame.handleAttack(player1, 0, 0);
-    expect(player1).toHaveProperty('turn', true);
-  });
   test('Deny more than one attack by one player', () => {
     const testGame = game();
     const player1 = testGame.player1;
