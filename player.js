@@ -1,4 +1,5 @@
 import Gameboard from './gameboard.js';
+import shuffleArray from './utils/shuffleArray.js';
 
 const Player = () => {
   // Make player human by default. Allow this state to be changed.
@@ -239,13 +240,12 @@ const Player = () => {
   };
 
   const makeSmartMove = (opponent) => {
-    // TODO: randomize order (shuffle array)
-
     // Make the smart move calculated in the previous turn...
+    shuffleArray(smartMoves);
     const move = smartMoves.pop();
     previousMoves.push(move);
 
-    // ... then if the ship is still afloat, set up the next smart move
+    // ...then if the ship is still afloat, set up the next smart move
     const { isShipSunk } = attack(opponent, ...move);
     if (isShipSunk) {
       smartMoveEnabled = false;
