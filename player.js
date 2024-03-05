@@ -209,7 +209,7 @@ const Player = () => {
       probingDirection = 'up';
       return [lastHitCell[0] - 1, lastHitCell[1]];
     }
-    // If horizontal
+    // Ship orientation horizontal
     if (firstRevealedCellsOfTarget[1][1] > firstRevealedCellsOfTarget[0][1]) {
       probingDirection = 'right';
       return [lastHitCell[0], lastHitCell[1] + 1];
