@@ -1,4 +1,6 @@
 import game from './game.js';
+import playVScomputerBtnHandler from './placeShips.js';
+import { getCellInfo, updateCellStyle } from './utils/dom.js';
 
 window.onerror = (message, url, line, col) => {
   // eslint-disable-next-line no-alert
@@ -12,7 +14,6 @@ Please inform the author if you see this! This shouldn't happen.`,
 let game1;
 let player1;
 let player2;
-let currentShipOrientation = 'horizontal';
 
 function newGame() {
   game1 = game();
@@ -32,18 +33,6 @@ const trackingBoard2 = document.querySelector('.player-2-tracking');
 const trackingBoards = [trackingBoard1, trackingBoard2];
 
 const player2boards = document.querySelector('.player-2-boards');
-
-const shipsToPlace = document
-  .querySelector('.ships-to-place')
-  .content.cloneNode(true);
-
-function updateCellStyle(boardClassName, row, column, style) {
-  const cellToUpdate = document.querySelector(
-    `.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
-  );
-
-  cellToUpdate.className = style;
-}
 
 // Render boards with ships visible
 function renderPrimaryBoard(player, board) {
@@ -75,20 +64,6 @@ function renderTrackingBoards() {
       }
     }
   });
-}
-
-function getCellInfo(e) {
-  const row = Number.parseFloat(e.target.getAttribute('row-number'));
-  const column = Number.parseFloat(e.target.getAttribute('column-number'));
-  const boardElem = e.target.parentElement;
-  const boardClassName = e.target.parentElement.className;
-
-  const opponentBoardClassName =
-    boardClassName === 'player-1-tracking'
-      ? 'player-2-primary'
-      : 'player-1-primary';
-
-  return { row, column, boardElem, boardClassName, opponentBoardClassName };
 }
 
 function updateBoardsAfterUserAttack(cellInfo, opponent) {
@@ -168,189 +143,22 @@ function newGameBtnHandler() {
   player2boards.classList.remove('hidden');
 }
 
-function renderShipPlacement(e, type, player) {
-  const cellInfo = getCellInfo(e);
-  const { boardClassName } = cellInfo;
-  const { row } = cellInfo;
-  const { column } = cellInfo;
-
-  // Place the ship on the internal board, if valid
-  const placedShip = player.board.placeShip(
-    row,
-    column,
-    type,
-    currentShipOrientation,
-  );
-  if (!placedShip) return;
-
-  const shipArray = player.board.getShipArray(
-    row,
-    column,
-    placedShip,
-    currentShipOrientation,
-  );
-  shipArray.forEach((location) =>
-    updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
-  );
-}
-
-function renderOrientationText(orientationText) {
-  const currentOrientationText = orientationText;
-  if (currentShipOrientation === 'vertical') {
-    currentOrientationText.textContent =
-      'Currently placing the ship vertically from the cell of your choosing...';
-  } else {
-    currentOrientationText.textContent =
-      'Currently placing the ship horizontally from the cell of your choosing...';
-  }
-}
-
-function renderRotateShip() {
-  const orientationContainer = document.querySelector('.orientation');
-  orientationContainer.replaceChildren();
-
-  const orientationText = document.createElement('p');
-  renderOrientationText(orientationText);
-  orientationContainer.appendChild(orientationText);
-
-  const toggleOrientationBtn = document.createElement('button');
-  toggleOrientationBtn.textContent = 'Change orientation';
-  orientationContainer.appendChild(toggleOrientationBtn);
-
-  toggleOrientationBtn.addEventListener('click', () => {
-    currentShipOrientation =
-      currentShipOrientation === 'horizontal' ? 'vertical' : 'horizontal';
-    renderOrientationText(orientationText);
-  });
-}
-
-function listenForShipPlacement(player, boardElem, type) {
-  const shipPlacementController = new AbortController();
-
-  boardElem.childNodes.forEach((cell) => {
-    if (cell.className !== 'ship-present') {
-      cell.addEventListener(
-        'click',
-        (e) => renderShipPlacement(e, type, player),
-        { signal: shipPlacementController.signal },
-      );
-    }
-  });
-  return shipPlacementController;
-}
-
-function activateShipsToPlaceButtons(boardElem, player) {
-  let carrierPlacementController = null;
-  let battleshipPlacementController = null;
-  let cruiserPlacementController = null;
-  let submarinePlacementController = null;
-  let destroyerPlacementController = null;
-
-  /**
-   * Deactivate cell listeners, allowing a new event listener to be attached, in
-   * order to allow a different ship to be placed instead.
-   */
-  function neutralizeShipPlacementListeners() {
-    if (battleshipPlacementController) battleshipPlacementController.abort();
-    if (carrierPlacementController) carrierPlacementController.abort();
-    if (cruiserPlacementController) cruiserPlacementController.abort();
-    if (submarinePlacementController) submarinePlacementController.abort();
-    if (destroyerPlacementController) destroyerPlacementController.abort();
-
-    // Reset controllers to null so they may be created again.
-    battleshipPlacementController = null;
-    carrierPlacementController = null;
-    cruiserPlacementController = null;
-    submarinePlacementController = null;
-    destroyerPlacementController = null;
-  }
-
-  const carrierButton = document.querySelector('.ships-to-place-list .carrier');
-  carrierButton.addEventListener('click', () => {
-    neutralizeShipPlacementListeners();
-    renderRotateShip();
-
-    carrierPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'carrier',
-    );
-  });
-
-  const battleshipButton = document.querySelector(
-    '.ships-to-place-list .battleship',
-  );
-  battleshipButton.addEventListener('click', () => {
-    neutralizeShipPlacementListeners();
-    renderRotateShip();
-
-    battleshipPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'battleship',
-    );
-  });
-
-  const cruiserButton = document.querySelector('.ships-to-place-list .cruiser');
-  cruiserButton.addEventListener('click', () => {
-    neutralizeShipPlacementListeners();
-    renderRotateShip();
-
-    cruiserPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'cruiser',
-    );
-  });
-
-  const submarineButton = document.querySelector(
-    '.ships-to-place-list .submarine',
-  );
-  submarineButton.addEventListener('click', () => {
-    neutralizeShipPlacementListeners();
-    renderRotateShip();
-
-    submarinePlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'submarine',
-    );
-  });
-
-  const destroyerButton = document.querySelector(
-    '.ships-to-place-list .destroyer',
-  );
-  destroyerButton.addEventListener('click', () => {
-    neutralizeShipPlacementListeners();
-    renderRotateShip();
-
-    destroyerPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'destroyer',
-    );
-  });
-}
-
-function playVScomputerBtnHandler() {
-  // Set up new game internally
-  newGame();
-  player2.makeAI();
-
-  // DOM
-  prepareBoards();
-  player2boards.classList.add('hidden');
-  trackingBoard1.classList.add('hidden');
-  primaryBoard1.after(shipsToPlace);
-  activateShipsToPlaceButtons(primaryBoard1, player1);
-}
-
 function activateButtons() {
   const newGameBtn = document.querySelector('.new-game');
   newGameBtn.addEventListener('click', () => newGameBtnHandler());
 
   const playVScomputerBtn = document.querySelector('.play-ai');
-  playVScomputerBtn.addEventListener('click', () => playVScomputerBtnHandler());
+  playVScomputerBtn.addEventListener('click', () =>
+    playVScomputerBtnHandler(
+      newGame,
+      player1,
+      player2,
+      player2boards,
+      trackingBoard1,
+      primaryBoard1,
+      prepareBoards,
+    ),
+  );
 }
 
 newGame();
