@@ -1,14 +1,18 @@
-import { primaryBoard1, trackingBoard1 } from './dom/elementGetters.js';
+import {
+  DOM,
+  body,
+  shipsToPlaceTemplate,
+  trackingBoard1template,
+} from './dom/elementGetters.js';
+import gameManager from './gameManager.js';
 import {
   getCellInfo,
+  getCurrentShipOrientation,
   renderRotateShip,
   updateCellStyle,
-  getCurrentShipOrientation,
 } from './utils/dom.js';
 
-const shipsToPlace = document
-  .querySelector('.ships-to-place')
-  .content.cloneNode(true);
+let placementBoardElem;
 
 function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
@@ -144,17 +148,98 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 }
 
-export default function showPlaceShipsVsAI(
-  player1,
-  player2,
-  player2boards,
-  prepareBoards,
-  currentGame,
-) {
-  // DOM
-  prepareBoards(player1, player2, currentGame);
-  player2boards.classList.add('hidden');
-  trackingBoard1.classList.add('hidden');
-  primaryBoard1.after(shipsToPlace);
-  activateShipsToPlaceButtons(primaryBoard1, player1);
+function renderPlacementBoard() {
+  placementBoardElem = document.querySelector('.player-1-primary');
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      const cell = document.createElement('button');
+      cell.setAttribute('column-number', j);
+      cell.setAttribute('row-number', i);
+      placementBoardElem.appendChild(cell);
+    }
+  }
+}
+
+function startGame() {
+  const currentGame = gameManager.getCurrentGame();
+  const { player1, player2 } = currentGame;
+
+  function updateBoardsAfterUserAttack(cellInfo) {
+    const { row, column } = cellInfo;
+    const boardCells = player2.board.getBoard();
+
+    if (boardCells[row][column].attackHit) {
+      updateCellStyle('player-1-tracking', row, column, 'hit');
+    } else {
+      updateCellStyle('player-1-tracking', row, column, 'miss');
+    }
+  }
+
+  function updateBoardsAfterAIAttack(attack) {
+    const [row, column] = attack;
+    const boardCells = player1.board.getBoard();
+
+    if (boardCells[row][column].attackHit) {
+      updateCellStyle('player-1-primary', row, column, 'hit');
+    } else {
+      updateCellStyle('player-1-primary', row, column, 'miss');
+    }
+  }
+
+  function handleAttackClick(e) {
+    const cellInfo = getCellInfo(e);
+    const { row } = cellInfo;
+    const { column } = cellInfo;
+
+    // Handle the attack and update the cell style on the appropriate boards
+    const attack = currentGame.handleAttack(player1, row, column);
+    // TODO: Check if following line is necessary
+    if (!attack) return;
+
+    updateBoardsAfterUserAttack(cellInfo);
+    setTimeout(() => updateBoardsAfterAIAttack(attack), 500);
+  }
+
+  // Remove the placement info, add the tracking board
+  const placementElem = document.querySelector('.placement');
+  placementElem.after(trackingBoard1template.content);
+  placementElem.remove();
+
+  // Populate the tracking board
+  const { trackingBoard1 } = DOM();
+  trackingBoard1.replaceChildren();
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      const cell = document.createElement('button');
+      cell.setAttribute('column-number', j);
+      cell.setAttribute('row-number', i);
+      trackingBoard1.appendChild(cell);
+    }
+  }
+
+  trackingBoard1.childNodes.forEach((cell) => {
+    cell.addEventListener('click', (e) => handleAttackClick(e));
+  });
+}
+
+function showPlaceShips(type) {
+  const { player1 } = gameManager.getCurrentGame();
+  body.replaceChildren(shipsToPlaceTemplate.content);
+  renderPlacementBoard();
+  activateShipsToPlaceButtons(placementBoardElem, player1);
+
+  const playBtn = document.querySelector('.play-btn');
+  playBtn.addEventListener('click', () => startGame());
+}
+
+function activateButtons() {
+  const newGameVsAIBtn = document.querySelector('.vs-ai');
+  newGameVsAIBtn.addEventListener('click', () => {
+    gameManager.newGameVsAI();
+    showPlaceShips('vs-ai');
+  });
+}
+
+export default function renderPage() {
+  activateButtons();
 }

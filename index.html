@@ -9,33 +9,46 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
-      <button class="new-game">New local multiplayer game</button>
-      <button class="play-ai">New game VS computer</button>
-
-      <div class="boards">
-        <div class="player-1-boards">
-          <div class="player-1-primary"></div>
-          <div class="player-1-tracking"></div>
-        </div>
-        <div class="player-2-boards">
-          <div class="player-2-primary"></div>
-          <div class="player-2-tracking"></div>
-        </div>
-      </div>
-    </div>
+    <menu class="new-game-buttons">
+      <button class="new-game-local-multiplayer">
+        New local multiplayer game
+      </button>
+      <button class="vs-ai">New game VS computer</button>
+    </menu>
   </body>
-  <template class="ships-to-place">
-    <div class="orientation">
-      <p>Prepare your board.</p>
-      <p>To start, pick any of the ships from the list.</p>
+
+  <template class="boards">
+    <div class="player-1-boards">
+      <div class="player-1-primary"></div>
+      <div class="player-1-tracking"></div>
     </div>
-    <div class="ships-to-place-list">
-      <div class="carrier">Carrier - Length 5</div>
-      <div class="battleship">Battleship - Length 4</div>
-      <div class="cruiser">Cruiser - Length 3</div>
-      <div class="submarine">Submarine - Length 3</div>
-      <div class="destroyer">Destroyer- Length 2</div>
+    <div class="player-2-boards">
+      <div class="player-2-primary"></div>
+      <div class="player-2-tracking"></div>
     </div>
   </template>
+
+  <template class="ships-to-place">
+    <div class="boards">
+      <div class="player-1-primary"></div>
+    </div>
+    <div class="placement">
+      <button class="play-btn">Play!</button>
+      <div class="orientation">
+        <p>Prepare your board.</p>
+        <p>To start, pick any of the ships from the list.</p>
+      </div>
+      <div class="ships-to-place-list">
+        <div class="carrier">Carrier - Length 5</div>
+        <div class="battleship">Battleship - Length 4</div>
+        <div class="cruiser">Cruiser - Length 3</div>
+        <div class="submarine">Submarine - Length 3</div>
+        <div class="destroyer">Destroyer- Length 2</div>
+      </div>
+    </div>
+  </template>
+
+  <template id="player-1-tracking"
+    ><div class="player-1-tracking"></div
+  ></template>
 </html>
