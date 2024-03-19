@@ -148,14 +148,20 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 }
 
-function renderPlacementBoard() {
+function renderPlacementBoard(currentGame) {
   placementBoardElem = document.querySelector('.player-1-primary');
+  placementBoardElem.replaceChildren();
+  const boardCells = currentGame.player1.board.getBoard();
+
   for (let i = 0; i < 10; i += 1) {
     for (let j = 0; j < 10; j += 1) {
       const cell = document.createElement('button');
       cell.setAttribute('column-number', j);
       cell.setAttribute('row-number', i);
       placementBoardElem.appendChild(cell);
+
+      if (boardCells[i][j].shipPresent)
+        updateCellStyle(placementBoardElem.className, i, j, 'ship-present');
     }
   }
 }
@@ -223,13 +229,22 @@ function startGame() {
 }
 
 function showPlaceShips(type) {
-  const { player1 } = gameManager.getCurrentGame();
   body.replaceChildren(shipsToPlaceTemplate.content);
-  renderPlacementBoard();
+  renderPlacementBoard(gameManager.getCurrentGame());
+  const { player1 } = gameManager.getCurrentGame();
   activateShipsToPlaceButtons(placementBoardElem, player1);
 
   const playBtn = document.querySelector('.play-btn');
   playBtn.addEventListener('click', () => startGame());
+
+  const placeShipsRandomlyBtn = document.querySelector(
+    '.place-ships-randomly-btn',
+  );
+  placeShipsRandomlyBtn.addEventListener('click', () => {
+    gameManager.newGameVsAI();
+    gameManager.getCurrentGame().player1.placeAllShipsRandomly();
+    renderPlacementBoard(gameManager.getCurrentGame());
+  });
 }
 
 function activateButtons() {
