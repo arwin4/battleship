@@ -245,6 +245,12 @@ function showPlaceShips(type) {
     gameManager.getCurrentGame().player1.placeAllShipsRandomly();
     renderPlacementBoard(gameManager.getCurrentGame());
   });
+
+  const resetBoardBtn = document.querySelector('.reset-board');
+  resetBoardBtn.addEventListener('click', () => {
+    gameManager.newGameVsAI();
+    renderPlacementBoard(gameManager.getCurrentGame());
+  });
 }
 
 function activateButtons() {
