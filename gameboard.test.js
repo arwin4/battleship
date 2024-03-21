@@ -202,3 +202,24 @@ describe('allShipsSunk()', () => {
     expect(board1.allShipsSunk()).toBe(true);
   });
 });
+
+describe('isBoardEmpty()', () => {
+  test('Should return true if no ships have been placed', () => {
+    const board1 = Gameboard();
+    expect(board1.isBoardEmpty()).toBe(true);
+  });
+
+  test('Should return false if 1 ship has been placed', () => {
+    const board1 = Gameboard();
+    board1.placeShip(0, 0, 'destroyer', 'vertical');
+    expect(board1.isBoardEmpty()).toBe(false);
+  });
+
+  test('Should return false if multiple ships have been placed', () => {
+    const board1 = Gameboard();
+    board1.placeShip(0, 0, 'destroyer', 'vertical');
+    expect(board1.isBoardEmpty()).toBe(false);
+    board1.placeShip(2, 2, 'cruiser', 'vertical');
+    expect(board1.isBoardEmpty()).toBe(false);
+  });
+});

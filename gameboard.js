@@ -167,6 +167,8 @@ const Gameboard = () => {
     return ships.every((ship) => ship.isSunk());
   };
 
+  const isBoardEmpty = () => ships.length === 0;
+
   const getBoard = () => board;
 
   return {
@@ -178,6 +180,7 @@ const Gameboard = () => {
     receiveAttack,
     allShipsSunk,
     getShipArray,
+    isBoardEmpty,
   };
 };
 
