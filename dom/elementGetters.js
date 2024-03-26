@@ -19,5 +19,6 @@ export function DOM() {
     resetBoardBtn: document.querySelector('.reset-board-btn'),
     randomMenu: document.querySelector('.random-menu'),
     placement: document.querySelector('.placement'),
+    orientation: document.querySelector('.orientation'),
   };
 }

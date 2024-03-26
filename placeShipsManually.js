@@ -52,6 +52,7 @@ function renderShipPlacement(e, type, player) {
 
   renderPrimaryBoard(DOM().primaryBoard1, player);
   activateRemoveShipListeners(DOM().primaryBoard1, player);
+  DOM().orientation.replaceChildren();
   showPlayButtonWhenBoardIsFull();
 }
 
