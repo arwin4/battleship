@@ -13,12 +13,21 @@ export function DOM() {
     trackingBoard1: document.querySelector('.player-1-tracking'),
     trackingBoard1template: document.querySelector('.player-1-tracking'),
     prepareGameTemplate: document.querySelector('.prepare-game'),
+    randomMenu: document.querySelector('.random-menu'),
+    placement: document.querySelector('.placement'),
+    orientation: document.querySelector('.orientation'),
+
+    /* == Buttons == */
     placeShipsRandomlyBtn: document.querySelector('.place-ships-randomly-btn'),
     placeShipsManuallyBtn: document.querySelector('.place-ships-manually-btn'),
     playBtn: document.querySelector('.play-btn'),
     resetBoardBtn: document.querySelector('.reset-board-btn'),
-    randomMenu: document.querySelector('.random-menu'),
-    placement: document.querySelector('.placement'),
-    orientation: document.querySelector('.orientation'),
+
+    // Placement buttons
+    carrierBtn: document.querySelector('.placement-btn.carrier'),
+    battleshipBtn: document.querySelector('.placement-btn.battleship'),
+    cruiserBtn: document.querySelector('.placement-btn.cruiser'),
+    submarineBtn: document.querySelector('.placement-btn.submarine'),
+    destroyerBtn: document.querySelector('.placement-btn.destroyer'),
   };
 }

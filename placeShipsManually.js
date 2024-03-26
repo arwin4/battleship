@@ -29,6 +29,13 @@ function activateRemoveShipListeners(board, player) {
       cell.addEventListener('click', (e) => {
         const cellInfo = getCellInfo(e);
         const { row, column } = cellInfo;
+
+        // Reactivate placement button
+        const type = player.board.getBoard()[row][column].shipID.getType();
+        const length = player.board.getBoard()[row][column].shipID.getLength();
+        DOM()[`${type}Btn`].removeAttribute('disabled');
+        DOM()[`${type}Btn`].textContent = `${type} - Length ${length}`;
+
         player.board.removeShip(row, column);
         renderPrimaryBoard(board, player);
       });
@@ -52,6 +59,8 @@ function renderShipPlacement(e, type, player) {
 
   renderPrimaryBoard(DOM().primaryBoard1, player);
   activateRemoveShipListeners(DOM().primaryBoard1, player);
+  DOM()[`${type}Btn`].textContent = 'Placed';
+  DOM()[`${type}Btn`].setAttribute('disabled', '');
   DOM().orientation.replaceChildren();
   showPlayButtonWhenBoardIsFull();
 }
@@ -73,6 +82,23 @@ function listenForShipPlacement(player, boardElem, type) {
 }
 
 function activateShipsToPlaceButtons(boardElem, player) {
+  function resetButtons() {
+    if (!DOM().carrierBtn.disabled)
+      DOM().carrierBtn.textContent = 'Carrier - Length 5';
+
+    if (!DOM().battleshipBtn.disabled)
+      DOM().battleshipBtn.textContent = 'Battleship - Length 4';
+
+    if (!DOM().cruiserBtn.disabled)
+      DOM().cruiserBtn.textContent = 'Cruiser - Length 3';
+
+    if (!DOM().submarineBtn.disabled)
+      DOM().submarineBtn.textContent = 'Submarine - Length 3';
+
+    if (!DOM().destroyerBtn.disabled)
+      DOM().destroyerBtn.textContent = 'Destroyer - Length 2';
+  }
+
   let carrierPlacementController = null;
   let battleshipPlacementController = null;
   let cruiserPlacementController = null;
@@ -98,8 +124,9 @@ function activateShipsToPlaceButtons(boardElem, player) {
     destroyerPlacementController = null;
   }
 
-  const carrierButton = document.querySelector('.ships-to-place-list .carrier');
-  carrierButton.addEventListener('click', () => {
+  DOM().carrierBtn.addEventListener('click', (e) => {
+    resetButtons();
+    e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
 
@@ -110,10 +137,9 @@ function activateShipsToPlaceButtons(boardElem, player) {
     );
   });
 
-  const battleshipButton = document.querySelector(
-    '.ships-to-place-list .battleship',
-  );
-  battleshipButton.addEventListener('click', () => {
+  DOM().battleshipBtn.addEventListener('click', (e) => {
+    resetButtons();
+    e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
 
@@ -124,8 +150,9 @@ function activateShipsToPlaceButtons(boardElem, player) {
     );
   });
 
-  const cruiserButton = document.querySelector('.ships-to-place-list .cruiser');
-  cruiserButton.addEventListener('click', () => {
+  DOM().cruiserBtn.addEventListener('click', (e) => {
+    resetButtons();
+    e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
 
@@ -136,10 +163,9 @@ function activateShipsToPlaceButtons(boardElem, player) {
     );
   });
 
-  const submarineButton = document.querySelector(
-    '.ships-to-place-list .submarine',
-  );
-  submarineButton.addEventListener('click', () => {
+  DOM().submarineBtn.addEventListener('click', (e) => {
+    resetButtons();
+    e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
 
@@ -150,10 +176,9 @@ function activateShipsToPlaceButtons(boardElem, player) {
     );
   });
 
-  const destroyerButton = document.querySelector(
-    '.ships-to-place-list .destroyer',
-  );
-  destroyerButton.addEventListener('click', () => {
+  DOM().destroyerBtn.addEventListener('click', (e) => {
+    resetButtons();
+    e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
 
