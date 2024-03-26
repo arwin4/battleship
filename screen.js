@@ -1,11 +1,11 @@
-import showPlaceShips from './dom/setupGame.js';
+import prepareGame from './dom/prepareGame.js';
 import gameManager from './gameManager.js';
 
 function activateButtons() {
   const newGameVsAIBtn = document.querySelector('.vs-ai');
   newGameVsAIBtn.addEventListener('click', () => {
     gameManager.newGameVsAI();
-    showPlaceShips('vs-ai');
+    prepareGame('vs-ai');
   });
 }
 

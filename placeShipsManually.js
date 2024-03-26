@@ -1,18 +1,27 @@
-import gameManager from '../gameManager.js';
-import {
-  DOM,
-  body,
-  shipsToPlaceTemplate,
-  trackingBoard1template,
-} from './elementGetters.js';
+// import { primaryBoard1, trackingBoard1 } from './dom/elementGetters.js';
+import { DOM } from './dom/elementGetters.js';
+import startGame from './dom/startGame.js';
+import gameManager from './gameManager.js';
 import {
   getCellInfo,
-  getCurrentShipOrientation,
   renderRotateShip,
   updateCellStyle,
-} from '../utils/dom.js';
+  getCurrentShipOrientation,
+} from './utils/dom.js';
 
-let placementBoardElem;
+const shipsToPlace = document
+  .querySelector('.ships-to-place')
+  .content.cloneNode(true);
+
+function showPlayButtonWhenBoardIsFull() {
+  if (gameManager.getCurrentGame().player1.board.getShips().length === 5) {
+    const playBtn = document.createElement('button');
+    playBtn.classList.add('play-btn');
+    playBtn.textContent = 'Play!';
+    playBtn.addEventListener('click', () => startGame());
+    DOM().primaryBoard1.after(playBtn);
+  }
+}
 
 function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
@@ -38,6 +47,8 @@ function renderShipPlacement(e, type, player) {
   shipArray.forEach((location) =>
     updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
   );
+
+  showPlayButtonWhenBoardIsFull();
 }
 
 function listenForShipPlacement(player, boardElem, type) {
@@ -52,6 +63,7 @@ function listenForShipPlacement(player, boardElem, type) {
       );
     }
   });
+
   return shipPlacementController;
 }
 
@@ -148,107 +160,13 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 }
 
-function renderPlacementBoard(currentGame) {
-  placementBoardElem = document.querySelector('.player-1-primary');
-  placementBoardElem.replaceChildren();
-  const boardCells = currentGame.player1.board.getBoard();
-
-  for (let i = 0; i < 10; i += 1) {
-    for (let j = 0; j < 10; j += 1) {
-      const cell = document.createElement('button');
-      cell.setAttribute('column-number', j);
-      cell.setAttribute('row-number', i);
-      placementBoardElem.appendChild(cell);
-
-      if (boardCells[i][j].shipPresent)
-        updateCellStyle(placementBoardElem.className, i, j, 'ship-present');
-    }
-  }
-}
-
-function startGame() {
-  const currentGame = gameManager.getCurrentGame();
-  const { player1, player2 } = currentGame;
-
-  function updateBoardsAfterUserAttack(cellInfo) {
-    const { row, column } = cellInfo;
-    const boardCells = player2.board.getBoard();
-
-    if (boardCells[row][column].attackHit) {
-      updateCellStyle('player-1-tracking', row, column, 'hit');
-    } else {
-      updateCellStyle('player-1-tracking', row, column, 'miss');
-    }
-  }
-
-  function updateBoardsAfterAIAttack(attack) {
-    const [row, column] = attack;
-    const boardCells = player1.board.getBoard();
-
-    if (boardCells[row][column].attackHit) {
-      updateCellStyle('player-1-primary', row, column, 'hit');
-    } else {
-      updateCellStyle('player-1-primary', row, column, 'miss');
-    }
-  }
-
-  function handleAttackClick(e) {
-    const cellInfo = getCellInfo(e);
-    const { row } = cellInfo;
-    const { column } = cellInfo;
-
-    // Handle the attack and update the cell style on the appropriate boards
-    const attack = currentGame.handleAttack(player1, row, column);
-    // TODO: Check if following line is necessary
-    if (!attack) return;
-
-    updateBoardsAfterUserAttack(cellInfo);
-    setTimeout(() => updateBoardsAfterAIAttack(attack), 500);
-  }
-
-  // Remove the placement info, add the tracking board
-  const placementElem = document.querySelector('.placement');
-  placementElem.after(trackingBoard1template.content);
-  placementElem.remove();
-
-  // Populate the tracking board
-  const { trackingBoard1 } = DOM();
-  trackingBoard1.replaceChildren();
-  for (let i = 0; i < 10; i += 1) {
-    for (let j = 0; j < 10; j += 1) {
-      const cell = document.createElement('button');
-      cell.setAttribute('column-number', j);
-      cell.setAttribute('row-number', i);
-      trackingBoard1.appendChild(cell);
-    }
-  }
-
-  trackingBoard1.childNodes.forEach((cell) => {
-    cell.addEventListener('click', (e) => handleAttackClick(e));
-  });
-}
-
-export default function showPlaceShips(type) {
-  body.replaceChildren(shipsToPlaceTemplate.content);
-  renderPlacementBoard(gameManager.getCurrentGame());
-  const { player1 } = gameManager.getCurrentGame();
-  activateShipsToPlaceButtons(placementBoardElem, player1);
-
-  const playBtn = document.querySelector('.play-btn');
-  playBtn.addEventListener('click', () => startGame());
-
-  const placeShipsRandomlyBtn = document.querySelector(
-    '.place-ships-randomly-btn',
+export default function placeShipsManually() {
+  DOM().randomMenu.after(shipsToPlace);
+  activateShipsToPlaceButtons(
+    DOM().primaryBoard1,
+    gameManager.getCurrentGame().player1,
   );
-  placeShipsRandomlyBtn.addEventListener('click', () => {
-    gameManager.newGameVsAI();
-    gameManager.getCurrentGame().player1.placeAllShipsRandomly();
-    renderPlacementBoard(gameManager.getCurrentGame());
-  });
 
-  const resetBoardBtn = document.querySelector('.reset-board');
-  resetBoardBtn.addEventListener('click', () => {
-    gameManager.newGameVsAI();
-    renderPlacementBoard(gameManager.getCurrentGame());
-  });
+  DOM().randomMenu.remove();
+  DOM().placeShipsManuallyBtn.remove();
 }
