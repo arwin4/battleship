@@ -23,6 +23,19 @@ function showPlayButtonWhenBoardIsFull() {
   }
 }
 
+function activateRemoveShipListeners(board, player) {
+  board.childNodes.forEach((cell) => {
+    if (cell.className === 'ship-present') {
+      cell.addEventListener('click', (e) => {
+        const cellInfo = getCellInfo(e);
+        const { row, column } = cellInfo;
+        player.board.removeShip(row, column);
+        renderPrimaryBoard(board, player);
+      });
+    }
+  });
+}
+
 function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
   const { row } = cellInfo;
@@ -38,6 +51,7 @@ function renderShipPlacement(e, type, player) {
   if (!placedShip) return;
 
   renderPrimaryBoard(DOM().primaryBoard1, player);
+  activateRemoveShipListeners(DOM().primaryBoard1, player);
   showPlayButtonWhenBoardIsFull();
 }
 
