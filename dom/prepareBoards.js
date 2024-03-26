@@ -1,26 +1,13 @@
-import { getCellInfo, updateCellStyle } from '../utils/dom.js';
-import { primaryBoard1, primaryBoard2 } from './elementGetters.js';
+import {
+  getCellInfo,
+  renderPrimaryBoard,
+  updateCellStyle,
+} from '../utils/dom.js';
+import { primaryBoard2 } from './elementGetters.js';
 
 const trackingBoard1 = document.querySelector('.player-1-tracking');
 const trackingBoard2 = document.querySelector('.player-2-tracking');
 const trackingBoards = [trackingBoard1, trackingBoard2];
-
-// Render boards with ships visible
-function renderPrimaryBoard(player, board) {
-  board.replaceChildren();
-  const boardCells = player.board.getBoard();
-  for (let i = 0; i < 10; i += 1) {
-    for (let j = 0; j < 10; j += 1) {
-      const cell = document.createElement('button');
-      cell.setAttribute('column-number', j);
-      cell.setAttribute('row-number', i);
-      board.appendChild(cell);
-
-      if (boardCells[i][j].shipPresent)
-        updateCellStyle(board.className, i, j, 'ship-present');
-    }
-  }
-}
 
 // Fill tracking board nodes with 10x10 cells
 function renderTrackingBoards() {

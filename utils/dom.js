@@ -27,6 +27,22 @@ export function updateCellStyle(boardClassName, row, column, style) {
   cellToUpdate.className = style;
 }
 
+export function renderPrimaryBoard(board, player) {
+  board.replaceChildren();
+  const boardCells = player.board.getBoard();
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      const cell = document.createElement('button');
+      cell.setAttribute('column-number', j);
+      cell.setAttribute('row-number', i);
+      board.appendChild(cell);
+
+      if (boardCells[i][j].shipPresent)
+        updateCellStyle(board.className, i, j, 'ship-present');
+    }
+  }
+}
+
 function renderOrientationText(orientationText) {
   const currentOrientationText = orientationText;
   if (currentShipOrientation === 'vertical') {
