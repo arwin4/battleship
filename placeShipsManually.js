@@ -5,8 +5,8 @@ import gameManager from './gameManager.js';
 import {
   getCellInfo,
   renderRotateShip,
-  updateCellStyle,
   getCurrentShipOrientation,
+  renderPrimaryBoard,
 } from './utils/dom.js';
 
 const shipsToPlace = document
@@ -25,7 +25,6 @@ function showPlayButtonWhenBoardIsFull() {
 
 function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
-  const { boardClassName } = cellInfo;
   const { row } = cellInfo;
   const { column } = cellInfo;
 
@@ -38,16 +37,7 @@ function renderShipPlacement(e, type, player) {
   );
   if (!placedShip) return;
 
-  const shipArray = player.board.getShipArray(
-    row,
-    column,
-    placedShip,
-    getCurrentShipOrientation(),
-  );
-  shipArray.forEach((location) =>
-    updateCellStyle(boardClassName, location[0], location[1], 'ship-present'),
-  );
-
+  renderPrimaryBoard(DOM().primaryBoard1, player);
   showPlayButtonWhenBoardIsFull();
 }
 
