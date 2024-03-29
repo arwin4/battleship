@@ -13,6 +13,42 @@ const shipsToPlace = document
   .querySelector('.ships-to-place')
   .content.cloneNode(true);
 
+function activateShipGhostListeners(length) {
+  function showGhosts(e) {
+    // Remove any ghost images from last hover
+    document
+      .querySelectorAll('.ghost')
+      .forEach((cell) => cell.classList.remove('ghost'));
+
+    // List all cells to render a ghost image on
+    const startRow = e.target.getAttribute('row-number');
+    const startColumn = e.target.getAttribute('column-number');
+    let ghostCellQuery = `[row-number="${startRow}"][column-number="${startColumn}"]`;
+
+    if (getCurrentShipOrientation() === 'horizontal') {
+      for (let i = 0; i < length - 1; i += 1) {
+        ghostCellQuery += `,[row-number="${startRow}"][column-number="${
+          parseFloat(startColumn) + 1 + i
+        }"]`;
+      }
+    } else {
+      for (let i = 0; i < length - 1; i += 1) {
+        ghostCellQuery += `,[row-number="${
+          parseFloat(startRow) + 1 + i
+        }"][column-number="${startColumn}"]`;
+      }
+    }
+
+    document
+      .querySelectorAll(ghostCellQuery)
+      .forEach((ghostCell) => ghostCell.classList.add('ghost'));
+  }
+
+  DOM().primaryBoard1.childNodes.forEach((cell) => {
+    cell.addEventListener('mouseover', (e) => showGhosts(e));
+  });
+}
+
 function showPlayButtonWhenBoardIsFull() {
   if (gameManager.getCurrentGame().player1.board.getShips().length === 5) {
     const playBtn = document.createElement('button');
@@ -133,6 +169,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
+    activateShipGhostListeners(5);
 
     carrierPlacementController = listenForShipPlacement(
       player,
@@ -147,6 +184,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
+    activateShipGhostListeners(4);
 
     battleshipPlacementController = listenForShipPlacement(
       player,
@@ -161,6 +199,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
+    activateShipGhostListeners(3);
 
     cruiserPlacementController = listenForShipPlacement(
       player,
@@ -175,6 +214,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
+    activateShipGhostListeners(3);
 
     submarinePlacementController = listenForShipPlacement(
       player,
@@ -189,6 +229,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
+    activateShipGhostListeners(2);
 
     destroyerPlacementController = listenForShipPlacement(
       player,

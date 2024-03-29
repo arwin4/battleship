@@ -28,6 +28,14 @@ body {
   row-gap: 10px;
 }
 
+.ghost {
+  background-color: grey;
+}
+
+.ghost.ship-present {
+  background-color: orangered;
+}
+
 .ship-present {
   background-color: green;
 }
