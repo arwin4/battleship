@@ -78,6 +78,10 @@ function activateRemoveShipListeners(board, player) {
 
         player.board.removeShip(row, column);
         renderPrimaryBoard(board, player);
+
+        if (gameManager.getCurrentGame().player1.board.getShips().length < 5) {
+          DOM().playBtn?.remove();
+        }
       });
     }
   });
