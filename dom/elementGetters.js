@@ -20,6 +20,7 @@ export function DOM() {
     /* == Buttons == */
     placeShipsRandomlyBtn: document.querySelector('.place-ships-randomly-btn'),
     placeShipsManuallyBtn: document.querySelector('.place-ships-manually-btn'),
+    removeShipBtn: document.querySelector('.remove-ship-btn'),
     playBtn: document.querySelector('.play-btn'),
     resetBoardBtn: document.querySelector('.reset-board-btn'),
 
