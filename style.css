@@ -3,6 +3,10 @@ body {
   color: aliceblue;
 }
 
+.placement-btn::first-letter {
+  text-transform: capitalize;
+}
+
 .player-1-primary,
 .player-2-primary,
 .player-1-tracking,
