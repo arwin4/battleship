@@ -15,11 +15,6 @@ const shipsToPlace = document
 
 function activateShipGhostListeners(length) {
   function showGhosts(e) {
-    // Remove any ghost images from last hover
-    document
-      .querySelectorAll('.ghost')
-      .forEach((cell) => cell.classList.remove('ghost'));
-
     // List all cells to render a ghost image on
     const startRow = e.target.getAttribute('row-number');
     const startColumn = e.target.getAttribute('column-number');
@@ -44,8 +39,15 @@ function activateShipGhostListeners(length) {
       .forEach((ghostCell) => ghostCell.classList.add('ghost'));
   }
 
+  function hideGhosts() {
+    document
+      .querySelectorAll('.ghost')
+      .forEach((ghostCell) => ghostCell.classList.remove('ghost'));
+  }
+
   DOM().primaryBoard1.childNodes.forEach((cell) => {
     cell.addEventListener('mouseover', (e) => showGhosts(e));
+    cell.addEventListener('mouseout', () => hideGhosts());
   });
 }
 
