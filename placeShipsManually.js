@@ -1,4 +1,3 @@
-// import { primaryBoard1, trackingBoard1 } from './dom/elementGetters.js';
 import { DOM } from './dom/elementGetters.js';
 import startGame from './dom/startGame.js';
 import gameManager from './gameManager.js';
@@ -14,8 +13,10 @@ const shipsToPlace = document
   .content.cloneNode(true);
 
 function activateShipGhostListeners(length) {
-  function showGhosts(e) {
-    // List all cells to render a ghost image on
+  /**
+   * List all cells to render a ghost image on
+   */
+  function getGhostCells(e) {
     const startRow = e.target.getAttribute('row-number');
     const startColumn = e.target.getAttribute('column-number');
     let ghostCellQuery = `[row-number="${startRow}"][column-number="${startColumn}"]`;
@@ -34,9 +35,12 @@ function activateShipGhostListeners(length) {
       }
     }
 
-    document
-      .querySelectorAll(ghostCellQuery)
-      .forEach((ghostCell) => ghostCell.classList.add('ghost'));
+    return document.querySelectorAll(ghostCellQuery);
+  }
+
+  function showGhosts(e) {
+    const ghostCells = getGhostCells(e);
+    ghostCells.forEach((ghostCell) => ghostCell.classList.add('ghost'));
   }
 
   function hideGhosts() {
@@ -45,8 +49,26 @@ function activateShipGhostListeners(length) {
       .forEach((ghostCell) => ghostCell.classList.remove('ghost'));
   }
 
+  /**
+   * If the placement is invalid, flash an error color twice
+   */
+  function showInvalidGhosts(e) {
+    const ghostCells = getGhostCells(e);
+    ghostCells.forEach((cell) => cell.classList.add('invalid'));
+    setTimeout(() => {
+      ghostCells.forEach((cell) => cell.classList.remove('invalid'));
+    }, 100);
+    setTimeout(() => {
+      ghostCells.forEach((cell) => cell.classList.add('invalid'));
+    }, 200);
+    setTimeout(() => {
+      ghostCells.forEach((cell) => cell.classList.remove('invalid'));
+    }, 300);
+  }
+
   DOM().primaryBoard1.childNodes.forEach((cell) => {
     cell.addEventListener('mouseover', (e) => showGhosts(e));
+    cell.addEventListener('click', (e) => showInvalidGhosts(e));
     cell.addEventListener('mouseout', () => hideGhosts());
   });
 }

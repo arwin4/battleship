@@ -40,16 +40,16 @@ body {
   background-color: green;
 }
 
+.invalid:not(.ship-present) {
+  background-color: darkred;
+}
+
 .sunk {
   background-color: darkcyan;
 }
 
 .miss {
   background-color: darkgrey;
-}
-
-.hit {
-  background-color: darkred;
 }
 
 .hidden {
