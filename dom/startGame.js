@@ -1,32 +1,14 @@
 import gameManager from '../gameManager.js';
-import { getCellInfo, updateCellStyle } from '../utils/dom.js';
+import {
+  getCellInfo,
+  renderPrimaryBoard,
+  renderTrackingBoard,
+} from '../utils/dom.js';
 import { DOM } from './elementGetters.js';
 
 export default function startGame() {
   const currentGame = gameManager.getCurrentGame();
   const { player1, player2 } = currentGame;
-
-  function updateBoardsAfterUserAttack(cellInfo) {
-    const { row, column } = cellInfo;
-    const boardCells = player2.board.getBoard();
-
-    if (boardCells[row][column].attackHit) {
-      updateCellStyle('player-1-tracking', row, column, 'hit');
-    } else {
-      updateCellStyle('player-1-tracking', row, column, 'miss');
-    }
-  }
-
-  function updateBoardsAfterAIAttack(attack) {
-    const [row, column] = attack;
-    const boardCells = player1.board.getBoard();
-
-    if (boardCells[row][column].attackHit) {
-      updateCellStyle('player-1-primary', row, column, 'hit');
-    } else {
-      updateCellStyle('player-1-primary', row, column, 'miss');
-    }
-  }
 
   function handleAttackClick(e) {
     const cellInfo = getCellInfo(e);
@@ -38,8 +20,10 @@ export default function startGame() {
     // TODO: Check if following line is necessary
     if (!attack) return;
 
-    updateBoardsAfterUserAttack(cellInfo);
-    setTimeout(() => updateBoardsAfterAIAttack(attack), 500);
+    renderTrackingBoard(DOM().trackingBoard1, player2);
+    setTimeout(() => {
+      renderPrimaryBoard(DOM().primaryBoard1, player1);
+    }, 500);
   }
 
   // Remove setup elements

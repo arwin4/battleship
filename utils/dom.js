@@ -37,10 +37,43 @@ export function renderPrimaryBoard(board, player) {
       cell.setAttribute('row-number', i);
       board.appendChild(cell);
 
-      if (boardCells[i][j].shipPresent)
+      if (boardCells[i][j].shipPresent && !boardCells[i][j].wasAttacked) {
         updateCellStyle(board.className, i, j, 'ship-present');
+      } else if (boardCells[i][j].wasAttacked && !boardCells[i][j].attackHit) {
+        updateCellStyle(board.className, i, j, 'miss');
+      } else if (
+        boardCells[i][j].attackHit &&
+        !boardCells[i][j].shipID?.isSunk()
+      ) {
+        updateCellStyle(board.className, i, j, 'hit');
+      } else if (boardCells[i][j].shipID?.isSunk()) {
+        updateCellStyle(board.className, i, j, 'sunk');
+      }
     }
   }
+}
+
+export function renderTrackingBoard(board, player) {
+  const boardCells = player.board.getBoard();
+
+  board.childNodes.forEach((cellElement) => {
+    const row = cellElement.getAttribute('row-number');
+    const column = cellElement.getAttribute('column-number');
+
+    if (
+      boardCells[row][column].wasAttacked &&
+      !boardCells[row][column].attackHit
+    ) {
+      updateCellStyle(board.className, row, column, 'miss');
+    } else if (
+      boardCells[row][column].attackHit &&
+      !boardCells[row][column].shipID?.isSunk()
+    ) {
+      updateCellStyle(board.className, row, column, 'hit');
+    } else if (boardCells[row][column].shipID?.isSunk()) {
+      updateCellStyle(board.className, row, column, 'sunk');
+    }
+  });
 }
 
 function renderOrientationText(orientationText) {
