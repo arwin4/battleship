@@ -12,8 +12,7 @@ export default function startGame() {
 
   function handleAttackClick(e) {
     const cellInfo = getCellInfo(e);
-    const { row } = cellInfo;
-    const { column } = cellInfo;
+    const { row, column } = cellInfo;
 
     // Handle the attack and update the cell style on the appropriate boards
     const attack = currentGame.handleAttack(player1, row, column);

@@ -25,10 +25,7 @@ function renderTrackingBoards() {
 }
 
 function updateBoardsAfterUserAttack(cellInfo, opponent) {
-  const { row } = cellInfo;
-  const { column } = cellInfo;
-  const { boardClassName } = cellInfo;
-  const { opponentBoardClassName } = cellInfo;
+  const { row, column, boardClassName, opponentBoardClassName } = cellInfo;
 
   // Get the board with the cell whose status has changed
   const boardCells = opponent.board.getBoard();
@@ -58,9 +55,7 @@ function updateBoardsAfterAIAttack(attack, currentPlayer) {
 function handleAttackClick(e, player1, player2, currentGame) {
   // TODO: disable click handler for already attacked cells
   const cellInfo = getCellInfo(e);
-  const { boardClassName } = cellInfo;
-  const { row } = cellInfo;
-  const { column } = cellInfo;
+  const { boardClassName, row, column } = cellInfo;
 
   // Find out who is making this move and assign their opponent
   const currentPlayer =

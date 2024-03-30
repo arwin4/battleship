@@ -89,8 +89,7 @@ function activateRemoveShipListeners(board, player) {
 
 function renderShipPlacement(e, type, player) {
   const cellInfo = getCellInfo(e);
-  const { row } = cellInfo;
-  const { column } = cellInfo;
+  const { row, column } = cellInfo;
 
   // Place the ship on the internal board, if valid
   const placedShip = player.board.placeShip(
