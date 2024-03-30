@@ -21,19 +21,10 @@
     </main>
   </body>
 
-  <template class="boards">
-    <div class="player-1-boards">
-      <div class="player-1-primary"></div>
-      <div class="player-1-tracking"></div>
-    </div>
-    <div class="player-2-boards">
-      <div class="player-2-primary"></div>
-      <div class="player-2-tracking"></div>
-    </div>
-  </template>
-
   <template class="random-placement-menu">
-    <div class="player-1-primary"></div>
+    <div class="boards">
+      <div class="player-1-primary"></div>
+    </div>
 
     <menu class="random-menu">
       <h3>OK, how about this board?</h3>
@@ -41,20 +32,6 @@
         Place the ships randomly again
       </button>
       <button class="play-btn">Looks good, let's play!</button>
-    </menu>
-  </template>
-
-  <template class="prepare-game">
-    <div class="boards">
-      <div class="player-1-primary"></div>
-    </div>
-    <menu class="random-menu">
-      <button disabled class="play-btn">Play!</button>
-      <button class="place-ships-randomly-btn">Place ships randomly</button>
-      <button disabled class="reset-board-btn">Remove all ships</button>
-    </menu>
-    <menu>
-      <button class="place-ships-manually-btn">Place ships manually</button>
     </menu>
   </template>
 
