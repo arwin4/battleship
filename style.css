@@ -40,6 +40,10 @@ body {
   background-color: green;
 }
 
+.sunk {
+  background-color: darkcyan;
+}
+
 .miss {
   background-color: darkgrey;
 }
