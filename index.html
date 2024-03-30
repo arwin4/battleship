@@ -9,12 +9,16 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <menu class="new-game-buttons">
-      <button class="new-game-local-multiplayer">
-        New local multiplayer game
-      </button>
-      <button class="vs-ai">New game VS computer</button>
-    </menu>
+    <h1>Let's play Battleship!</h1>
+    <main class="prepare-game">
+      <h3>Choose how to prepare your board:</h3>
+      <menu>
+        <button class="place-ships-manually-btn">
+          I want to place my ships myself
+        </button>
+        <button class="place-ships-randomly-btn">Place my ships for me</button>
+      </menu>
+    </main>
   </body>
 
   <template class="boards">
@@ -26,6 +30,18 @@
       <div class="player-2-primary"></div>
       <div class="player-2-tracking"></div>
     </div>
+  </template>
+
+  <template class="random-placement-menu">
+    <div class="player-1-primary"></div>
+
+    <menu class="random-menu">
+      <h3>OK, how about this board?</h3>
+      <button class="place-ships-again-btn">
+        Place the ships randomly again
+      </button>
+      <button class="play-btn">Looks good, let's play!</button>
+    </menu>
   </template>
 
   <template class="prepare-game">

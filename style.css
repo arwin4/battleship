@@ -44,6 +44,10 @@ body {
   background-color: darkred;
 }
 
+.hit {
+  background-color: darkred;
+}
+
 .sunk {
   background-color: darkcyan;
 }

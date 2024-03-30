@@ -26,6 +26,7 @@ export default function startGame() {
   }
 
   // Remove setup elements
+  DOM().randomMenu?.remove();
   DOM().placeShipsRandomlyBtn?.remove();
   DOM().playBtn?.remove();
   DOM().resetBoardBtn?.remove();

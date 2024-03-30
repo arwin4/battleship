@@ -1,3 +1,4 @@
+// import { primaryBoard1, trackingBoard1 } from './dom/elementGetters.js';
 import { DOM } from './dom/elementGetters.js';
 import startGame from './dom/startGame.js';
 import gameManager from './gameManager.js';

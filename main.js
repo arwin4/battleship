@@ -1,4 +1,5 @@
-import renderPage from './screen.js';
+import prepareGame from './dom/prepareGame.js';
+import gameManager from './gameManager.js';
 
 // Alert on errors globally
 window.onerror = (message, url, line, col) => {
@@ -10,4 +11,5 @@ Please inform the author if you see this! This shouldn't happen.`,
   );
 };
 
-renderPage();
+// gameManager.newGameVsAI();
+prepareGame('vs-ai');
