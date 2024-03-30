@@ -71,6 +71,14 @@ describe('Turns', () => {
     testGame.handleAttack(player1, 0, 0);
     expect(testGame.player2.getCurrentTurnNumber()).toBe(2);
   });
+  test('Turn number does not increase when same location is attacked twice (second attack is ignored)', () => {
+    const testGame = game();
+    const player1 = testGame.player1;
+    testGame.handleAttack(player1, 0, 0);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(1);
+    testGame.handleAttack(player1, 0, 0);
+    expect(testGame.player2.getCurrentTurnNumber()).toBe(1);
+  });
 });
 
 describe('AI', () => {

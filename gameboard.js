@@ -146,9 +146,8 @@ const Gameboard = () => {
   const receiveAttack = (row, column) => {
     const attackedLocation = board[row][column];
 
-    // Throw error when a location is attacked more than once
-    if (attackedLocation.wasAttacked)
-      throw new Error('Location was already attacked');
+    // Ignore when a location is attacked more than once
+    if (attackedLocation.wasAttacked) return false;
 
     attackedLocation.wasAttacked = true;
 
