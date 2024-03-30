@@ -7,10 +7,7 @@ body {
   text-transform: capitalize;
 }
 
-.player-1-primary,
-.player-2-primary,
-.player-1-tracking,
-.player-2-tracking {
+.boards > * {
   width: 300px;
   height: 300px;
 
@@ -21,39 +18,36 @@ body {
   border: 4px solid rgb(0, 0, 0);
   box-shadow: inset 0px 0px 5px 0px rgb(0 0 0 / 75%);
   border-radius: 2%;
+
+  .ghost {
+    background-color: grey;
+  }
+
+  .ghost.ship-present {
+    background-color: orangered;
+  }
+
+  .ship-present {
+    background-color: green;
+  }
+
+  .invalid:not(.ship-present),
+  .hit {
+    background-color: darkred;
+  }
+
+  .sunk {
+    background-color: black;
+  }
+
+  .miss {
+    background-color: darkgrey;
+  }
 }
 
 .ships-to-place-list {
   display: grid;
   row-gap: 10px;
-}
-
-.ghost {
-  background-color: grey;
-}
-
-.ghost.ship-present {
-  background-color: orangered;
-}
-
-.ship-present {
-  background-color: green;
-}
-
-.invalid:not(.ship-present) {
-  background-color: darkred;
-}
-
-.hit {
-  background-color: darkred;
-}
-
-.sunk {
-  background-color: darkcyan;
-}
-
-.miss {
-  background-color: darkgrey;
 }
 
 .hidden {
