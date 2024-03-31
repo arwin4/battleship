@@ -1,3 +1,9 @@
+:root {
+  /* Colors */
+  --main-color: #383614;
+  --background-color: #dbf4ad;
+}
+
 @font-face {
   font-family: 'Readex-Pro';
   src: url('assets/Readex-Pro.ttf') format('truetype');
