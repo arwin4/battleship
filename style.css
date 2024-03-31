@@ -85,3 +85,21 @@ body {
   }
 }
 
+button:not(.boards *) {
+  border: none;
+
+  padding: 5px;
+
+  border-radius: 3px;
+
+  font-size: 1.2rem;
+  color: ghostwhite;
+
+  background-color: var(--main-color);
+
+  &:hover,
+  &:focus-visible {
+    cursor: pointer;
+    color: var(--background-color);
+  }
+}
