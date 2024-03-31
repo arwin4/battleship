@@ -73,6 +73,10 @@ body {
       border-radius: 10px;
     }
 
+    &.invalid:not(.ship-present) {
+      animation: 0.3s error-shake;
+    }
+
     &.sunk {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 33 32'%3E%3Cpath fill='%2E2E0F' d='m24.778 21.42l-5.502-5.503l5.5-5.502l-2.827-2.83l-5.503 5.502l-5.502-5.502l-2.828 2.83l5.5 5.502l-5.5 5.502l2.83 2.828l5.5-5.502l5.5 5.502z'/%3E%3C/svg%3E");
       /* Source: https://icon-sets.iconify.design/raphael/cross/ */
@@ -99,6 +103,21 @@ body {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes error-shake {
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }
 

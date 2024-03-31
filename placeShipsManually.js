@@ -58,12 +58,6 @@ function activateShipGhostListeners(length) {
     ghostCells.forEach((cell) => cell.classList.add('invalid'));
     setTimeout(() => {
       ghostCells.forEach((cell) => cell.classList.remove('invalid'));
-    }, 100);
-    setTimeout(() => {
-      ghostCells.forEach((cell) => cell.classList.add('invalid'));
-    }, 200);
-    setTimeout(() => {
-      ghostCells.forEach((cell) => cell.classList.remove('invalid'));
     }, 300);
   }
 
