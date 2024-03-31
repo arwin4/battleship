@@ -7,6 +7,8 @@ import startGame from './startGame.js';
 function renderPlacementBoard(currentGame) {
   DOM().primaryBoard1.replaceChildren();
 
+  DOM().primaryBoard1.replaceWith(DOM().primaryBoard1);
+
   const boardCells = currentGame.player1.board.getBoard();
   for (let i = 0; i < 10; i += 1) {
     for (let j = 0; j < 10; j += 1) {
