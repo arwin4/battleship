@@ -16,8 +16,8 @@
 }
 
 body {
-  background-color: hsl(0, 0%, 14%);
-  color: aliceblue;
+  background-color: var(--background-color);
+  color: var(--main-color);
 }
 
 .placement-btn::first-letter {
@@ -32,37 +32,54 @@ body {
   grid-template-rows: repeat(10, 1fr);
   grid-template-columns: repeat(10, 1fr);
 
-  border: 4px solid rgb(0, 0, 0);
-  box-shadow: inset 0px 0px 5px 0px rgb(0 0 0 / 75%);
+  border: 4px solid var(--main-color);
   border-radius: 2%;
+
+  background-color: var(--main-color);
 
   &.player-1-primary {
     animation: ease-in-out 1s slidein;
   }
 
-  .ghost {
-    background-color: grey;
-  }
+  button {
+    background-color: ghostwhite;
+    border: 1px solid;
 
-  .ghost.ship-present {
-    background-color: orangered;
-  }
+    transition: ease 0.2s;
 
-  .ship-present {
-    background-color: green;
-  }
+    &:not(.player-1-primary *, [class]) {
+      cursor: pointer;
+    }
 
-  .invalid:not(.ship-present),
-  .hit {
-    background-color: darkred;
-  }
+    &.ghost,
+    &.miss {
+      background-color: #5d89ba;
+    }
 
-  .sunk {
-    background-color: black;
-  }
+    &.ghost.ship-present {
+      /* background-color: #e25822; */
+    }
 
-  .miss {
-    background-color: darkgrey;
+    &.ship-present {
+      background-color: #95dc56;
+      border-radius: 10px;
+    }
+
+    &.ghost.ship-present,
+    &.invalid:not(.ship-present),
+    &.hit,
+    &.sunk {
+      background-color: #e25822;
+      border-radius: 10px;
+    }
+
+    &.sunk {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 33 32'%3E%3Cpath fill='%2E2E0F' d='m24.778 21.42l-5.502-5.503l5.5-5.502l-2.827-2.83l-5.503 5.502l-5.502-5.502l-2.828 2.83l5.5 5.502l-5.5 5.502l2.83 2.828l5.5-5.502l5.5 5.502z'/%3E%3C/svg%3E");
+      /* Source: https://icon-sets.iconify.design/raphael/cross/ */
+      background-position: center;
+      border-radius: 15px;
+      border-color: var(--main-color);
+    }
   }
 }
 
