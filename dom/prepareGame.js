@@ -1,5 +1,5 @@
 import gameManager from '../gameManager.js';
-import { DOM } from './elementGetters.js';
+import DOM from './elementGetters.js';
 import { updateCellStyle } from '../utils/dom.js';
 import placeShipsManually from '../placeShipsManually.js';
 import startGame from './startGame.js';

@@ -4,7 +4,7 @@ import {
   renderPrimaryBoard,
   renderTrackingBoard,
 } from '../utils/dom.js';
-import { DOM } from './elementGetters.js';
+import DOM from './elementGetters.js';
 
 export default function startGame() {
   const currentGame = gameManager.getCurrentGame();
