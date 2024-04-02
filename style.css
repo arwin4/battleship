@@ -142,5 +142,6 @@ button:not(.boards *) {
   &[disabled] {
     background-color: ghostwhite;
     color: var(--main-color);
+    cursor: not-allowed;
   }
 }

@@ -105,11 +105,14 @@ function activateRemoveShipListeners(board, player) {
         DOM()[`${type}Btn`].removeAttribute('disabled');
         DOM()[`${type}Btn`].textContent = `${type} - Length ${length}`;
 
+        // Reset ship remove btn
         DOM().removeShipBtn.textContent = 'Remove a ship';
+        DOM().removeShipBtn.removeAttribute('disabled');
 
         player.board.removeShip(row, column);
         renderPrimaryBoard(board, player);
 
+        // Render conditional buttons
         if (gameManager.getCurrentGame().player1.board.getShips().length < 5) {
           DOM().playBtn?.remove();
         }
@@ -130,6 +133,7 @@ function showRemoveShipButton(player) {
   removeShipBtn.addEventListener('click', (e) => {
     activateRemoveShipListeners(DOM().primaryBoard1, player);
     e.target.textContent = 'Click on a ship to remove it...';
+    e.target.setAttribute('disabled', '');
   });
   DOM().boards.after(removeShipBtn);
 }
