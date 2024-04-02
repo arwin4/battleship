@@ -65,7 +65,7 @@ function activateShipGhostListeners(length) {
   }
 
   /**
-   * If the placement is invalid, flash an error color twice
+   * If the placement is invalid, show an error shake
    */
   function showInvalidGhosts(e) {
     const ghostCells = getGhostCells(e);
