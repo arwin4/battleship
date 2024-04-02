@@ -3,7 +3,6 @@ export const body = document.querySelector('body');
 export const primaryBoard2 = document.querySelector('.player-2-primary');
 
 export const trackingBoard2 = document.querySelector('.player-2-tracking');
-// export const trackingBoards = [trackingBoard1, trackingBoard2];
 
 export const boards = document.querySelector('.boards');
 
