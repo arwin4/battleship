@@ -12,6 +12,7 @@ import {
   deactivateShipRotation,
   getCurrentShipOrientation,
   getShipRotationHotkeyController,
+  getShipPlacementButtonText,
 } from './utils/dom.js';
 
 function renderManualPlacementBoard(currentGame) {
@@ -69,9 +70,8 @@ function activateRemoveShipListeners(board, player) {
 
         // Reactivate placement button
         const type = player.board.getBoard()[row][column].shipID.getType();
-        const length = player.board.getBoard()[row][column].shipID.getLength();
         DOM()[`${type}Btn`].removeAttribute('disabled');
-        DOM()[`${type}Btn`].textContent = `${type} - Length ${length}`;
+        DOM()[`${type}Btn`].textContent = getShipPlacementButtonText(type);
 
         // Reset ship remove btn
         DOM().removeShipBtn.textContent = 'Remove a ship';
@@ -151,19 +151,20 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn?.remove();
 
     if (!DOM().carrierBtn.disabled)
-      DOM().carrierBtn.textContent = 'Carrier ▪️▪️▪️▪️▪️';
+      DOM().carrierBtn.textContent = getShipPlacementButtonText('carrier');
 
     if (!DOM().battleshipBtn.disabled)
-      DOM().battleshipBtn.textContent = 'Battleship ▪️▪️▪️▪️';
+      DOM().battleshipBtn.textContent =
+        getShipPlacementButtonText('battleship');
 
     if (!DOM().cruiserBtn.disabled)
-      DOM().cruiserBtn.textContent = 'Cruiser ▪️▪️▪️';
+      DOM().cruiserBtn.textContent = getShipPlacementButtonText('cruiser');
 
     if (!DOM().submarineBtn.disabled)
-      DOM().submarineBtn.textContent = 'Submarine ▪️▪️▪️';
+      DOM().submarineBtn.textContent = getShipPlacementButtonText('submarine');
 
     if (!DOM().destroyerBtn.disabled)
-      DOM().destroyerBtn.textContent = 'Destroyer ▪️▪️▪️';
+      DOM().destroyerBtn.textContent = getShipPlacementButtonText('destroyer');
   }
 
   let carrierPlacementController = null;

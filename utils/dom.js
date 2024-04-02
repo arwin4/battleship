@@ -178,6 +178,22 @@ export function renderRotateShip(length) {
   );
 }
 
+export function getShipPlacementButtonText(type) {
+  let length;
+  if (type === 'carrier') length = 5;
+  if (type === 'battleship') length = 4;
+  if (type === 'cruiser') length = 3;
+  if (type === 'submarine') length = 3;
+  if (type === 'destroyer') length = 2;
+
+  let visualLength = '';
+  for (let i = length; i > 0; i -= 1) {
+    visualLength += '▪️';
+  }
+
+  return `${type} ${visualLength}`;
+}
+
 export {
   getCurrentShipOrientation,
   activateShipRotation,
