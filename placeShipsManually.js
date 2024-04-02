@@ -5,9 +5,14 @@ import gameManager from './gameManager.js';
 import {
   getCellInfo,
   renderRotateShip,
-  getCurrentShipOrientation,
   renderPrimaryBoard,
   updateCellStyle,
+  showGhosts,
+  getGhostCells,
+  hideGhosts,
+  deactivateShipRotation,
+  getCurrentShipOrientation,
+  getShipRotationHotkeyController,
 } from './utils/dom.js';
 
 function renderManualPlacementBoard(currentGame) {
@@ -29,46 +34,10 @@ function renderManualPlacementBoard(currentGame) {
 
 function activateShipGhostListeners(length) {
   /**
-   * List all cells to render a ghost image on
-   */
-  function getGhostCells(e) {
-    const startRow = e.target.getAttribute('row-number');
-    const startColumn = e.target.getAttribute('column-number');
-    let ghostCellQuery = `[row-number="${startRow}"][column-number="${startColumn}"]`;
-
-    if (getCurrentShipOrientation() === 'horizontal') {
-      for (let i = 0; i < length - 1; i += 1) {
-        ghostCellQuery += `,[row-number="${startRow}"][column-number="${
-          parseFloat(startColumn) + 1 + i
-        }"]`;
-      }
-    } else {
-      for (let i = 0; i < length - 1; i += 1) {
-        ghostCellQuery += `,[row-number="${
-          parseFloat(startRow) + 1 + i
-        }"][column-number="${startColumn}"]`;
-      }
-    }
-
-    return document.querySelectorAll(ghostCellQuery);
-  }
-
-  function showGhosts(e) {
-    const ghostCells = getGhostCells(e);
-    ghostCells.forEach((ghostCell) => ghostCell.classList.add('ghost'));
-  }
-
-  function hideGhosts() {
-    document
-      .querySelectorAll('.ghost')
-      .forEach((ghostCell) => ghostCell.classList.remove('ghost'));
-  }
-
-  /**
    * If the placement is invalid, show an error shake
    */
   function showInvalidGhosts(e) {
-    const ghostCells = getGhostCells(e);
+    const ghostCells = getGhostCells(e, length);
     ghostCells.forEach((cell) => cell.classList.add('invalid'));
     setTimeout(() => {
       ghostCells.forEach((cell) => cell.classList.remove('invalid'));
@@ -76,7 +45,7 @@ function activateShipGhostListeners(length) {
   }
 
   DOM().primaryBoard1.childNodes.forEach((cell) => {
-    cell.addEventListener('mouseover', (e) => showGhosts(e));
+    cell.addEventListener('mouseover', (e) => showGhosts(e, length));
     cell.addEventListener('click', (e) => showInvalidGhosts(e));
     cell.addEventListener('mouseout', () => hideGhosts());
   });
@@ -158,6 +127,8 @@ function renderShipPlacement(e, type, player) {
   DOM().orientation.replaceChildren();
   showPlayButtonWhenBoardIsFull();
   if (!DOM().removeShipBtn) showRemoveShipButton(player);
+  deactivateShipRotation();
+  getShipRotationHotkeyController().abort();
 }
 
 function listenForShipPlacement(player, boardElem, type) {
@@ -225,7 +196,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(getCurrentShipOrientation());
+    renderRotateShip(5);
     activateShipGhostListeners(5);
 
     carrierPlacementController = listenForShipPlacement(
@@ -239,7 +210,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(getCurrentShipOrientation());
+    renderRotateShip(4);
     activateShipGhostListeners(4);
 
     battleshipPlacementController = listenForShipPlacement(
@@ -253,7 +224,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(getCurrentShipOrientation());
+    renderRotateShip(3);
     activateShipGhostListeners(3);
 
     cruiserPlacementController = listenForShipPlacement(
@@ -267,7 +238,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(getCurrentShipOrientation());
+    renderRotateShip(3);
     activateShipGhostListeners(3);
 
     submarinePlacementController = listenForShipPlacement(
@@ -281,7 +252,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(getCurrentShipOrientation());
+    renderRotateShip(2);
     activateShipGhostListeners(2);
 
     destroyerPlacementController = listenForShipPlacement(

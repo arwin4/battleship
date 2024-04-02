@@ -5,6 +5,18 @@ const toggleCurrentShipOrientation = () => {
 };
 const getCurrentShipOrientation = () => currentShipOrientation;
 
+let shipRotationActive = false;
+const activateShipRotation = () => {
+  shipRotationActive = true;
+};
+const deactivateShipRotation = () => {
+  shipRotationActive = false;
+};
+const isShipRotationActive = () => shipRotationActive;
+
+let shipRotationHotkeyController = new AbortController();
+const getShipRotationHotkeyController = () => shipRotationHotkeyController;
+
 export function getCellInfo(e) {
   const row = Number.parseFloat(e.target.getAttribute('row-number'));
   const column = Number.parseFloat(e.target.getAttribute('column-number'));
@@ -87,7 +99,57 @@ function renderOrientationText(orientationText) {
   }
 }
 
-export function renderRotateShip() {
+/**
+ * List all cells to render a ghost image on
+ */
+export function getGhostCells(e, length) {
+  const startRow = e.target.getAttribute('row-number');
+  const startColumn = e.target.getAttribute('column-number');
+  let ghostCellQuery = `[row-number="${startRow}"][column-number="${startColumn}"]`;
+
+  if (getCurrentShipOrientation() === 'horizontal') {
+    for (let i = 0; i < length - 1; i += 1) {
+      ghostCellQuery += `,[row-number="${startRow}"][column-number="${
+        parseFloat(startColumn) + 1 + i
+      }"]`;
+    }
+  } else {
+    for (let i = 0; i < length - 1; i += 1) {
+      ghostCellQuery += `,[row-number="${
+        parseFloat(startRow) + 1 + i
+      }"][column-number="${startColumn}"]`;
+    }
+  }
+
+  return document.querySelectorAll(ghostCellQuery);
+}
+
+export function showGhosts(e, length) {
+  const ghostCells = getGhostCells(e, length);
+  ghostCells.forEach((ghostCell) => ghostCell.classList.add('ghost'));
+}
+
+export function hideGhosts() {
+  document
+    .querySelectorAll('.ghost')
+    .forEach((ghostCell) => ghostCell.classList.remove('ghost'));
+}
+
+function rotateShipOnHotkey(orientationText, length) {
+  toggleCurrentShipOrientation();
+  renderOrientationText(orientationText);
+  hideGhosts();
+
+  // Get the cell hovered over in order to display the rotated ghost ship
+  const cell = Array.from(document.querySelectorAll(':hover')).at(-1);
+  const simulatedEvent = {};
+  simulatedEvent.target = cell;
+  showGhosts(simulatedEvent, length);
+}
+
+export function renderRotateShip(length) {
+  activateShipRotation();
+
   const orientationContainer = document.querySelector('.orientation');
   orientationContainer.replaceChildren();
 
@@ -96,13 +158,29 @@ export function renderRotateShip() {
   orientationContainer.appendChild(orientationText);
 
   const toggleOrientationBtn = document.createElement('button');
-  toggleOrientationBtn.textContent = 'Change orientation';
+  toggleOrientationBtn.textContent = 'Rotate ship (hotkey: R)';
   orientationContainer.appendChild(toggleOrientationBtn);
 
   toggleOrientationBtn.addEventListener('click', () => {
     toggleCurrentShipOrientation();
     renderOrientationText(orientationText);
   });
+
+  shipRotationHotkeyController = new AbortController();
+  document.addEventListener(
+    'keyup',
+    (e) => {
+      if (e.key === 'r' && isShipRotationActive()) {
+        rotateShipOnHotkey(orientationText, length);
+      }
+    },
+    { signal: shipRotationHotkeyController.signal },
+  );
 }
 
-export { getCurrentShipOrientation };
+export {
+  getCurrentShipOrientation,
+  activateShipRotation,
+  deactivateShipRotation,
+  getShipRotationHotkeyController,
+};
