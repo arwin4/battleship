@@ -7,11 +7,25 @@ import {
   renderRotateShip,
   getCurrentShipOrientation,
   renderPrimaryBoard,
+  updateCellStyle,
 } from './utils/dom.js';
 
-const shipsToPlace = document
-  .querySelector('.ships-to-place')
-  .content.cloneNode(true);
+function renderManualPlacementBoard(currentGame) {
+  DOM().primaryBoard1.replaceChildren();
+
+  const boardCells = currentGame.player1.board.getBoard();
+  for (let i = 0; i < 10; i += 1) {
+    for (let j = 0; j < 10; j += 1) {
+      const cell = document.createElement('button');
+      cell.setAttribute('column-number', j);
+      cell.setAttribute('row-number', i);
+      DOM().primaryBoard1.appendChild(cell);
+
+      if (boardCells[i][j].shipPresent)
+        updateCellStyle(DOM().primaryBoard1.className, i, j, 'ship-present');
+    }
+  }
+}
 
 function activateShipGhostListeners(length) {
   /**
@@ -74,7 +88,7 @@ function showPlayButtonWhenBoardIsFull() {
     playBtn.classList.add('play-btn');
     playBtn.textContent = 'Play!';
     playBtn.addEventListener('click', () => startGame());
-    DOM().primaryBoard1.after(playBtn);
+    DOM().boards.after(playBtn);
   }
 }
 
@@ -99,9 +113,25 @@ function activateRemoveShipListeners(board, player) {
         if (gameManager.getCurrentGame().player1.board.getShips().length < 5) {
           DOM().playBtn?.remove();
         }
+        if (
+          gameManager.getCurrentGame().player1.board.getShips().length === 0
+        ) {
+          DOM().removeShipBtn.remove();
+        }
       });
     }
   });
+}
+
+function showRemoveShipButton(player) {
+  const removeShipBtn = document.createElement('button');
+  removeShipBtn.classList.add('remove-ship-btn');
+  removeShipBtn.textContent = 'Remove a ship';
+  removeShipBtn.addEventListener('click', (e) => {
+    activateRemoveShipListeners(DOM().primaryBoard1, player);
+    e.target.textContent = 'Click on a ship to remove it...';
+  });
+  DOM().boards.after(removeShipBtn);
 }
 
 function renderShipPlacement(e, type, player) {
@@ -121,9 +151,9 @@ function renderShipPlacement(e, type, player) {
   renderPrimaryBoard(DOM().primaryBoard1, player);
   DOM()[`${type}Btn`].textContent = 'Placed';
   DOM()[`${type}Btn`].setAttribute('disabled', '');
-  DOM().removeShipBtn.removeAttribute('disabled');
   DOM().orientation.replaceChildren();
   showPlayButtonWhenBoardIsFull();
+  if (!DOM().removeShipBtn) showRemoveShipButton(player);
 }
 
 function listenForShipPlacement(player, boardElem, type) {
@@ -144,6 +174,8 @@ function listenForShipPlacement(player, boardElem, type) {
 
 function activateShipsToPlaceButtons(boardElem, player) {
   function resetButtons() {
+    DOM().removeShipBtn?.remove();
+
     if (!DOM().carrierBtn.disabled)
       DOM().carrierBtn.textContent = 'Carrier - Length 5';
 
@@ -188,7 +220,6 @@ function activateShipsToPlaceButtons(boardElem, player) {
   DOM().carrierBtn.addEventListener('click', (e) => {
     resetButtons();
     e.target.textContent = 'Placing...';
-    DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
     activateShipGhostListeners(5);
@@ -203,7 +234,6 @@ function activateShipsToPlaceButtons(boardElem, player) {
   DOM().battleshipBtn.addEventListener('click', (e) => {
     resetButtons();
     e.target.textContent = 'Placing...';
-    DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
     activateShipGhostListeners(4);
@@ -218,7 +248,6 @@ function activateShipsToPlaceButtons(boardElem, player) {
   DOM().cruiserBtn.addEventListener('click', (e) => {
     resetButtons();
     e.target.textContent = 'Placing...';
-    DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
     activateShipGhostListeners(3);
@@ -233,7 +262,6 @@ function activateShipsToPlaceButtons(boardElem, player) {
   DOM().submarineBtn.addEventListener('click', (e) => {
     resetButtons();
     e.target.textContent = 'Placing...';
-    DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
     activateShipGhostListeners(3);
@@ -248,7 +276,6 @@ function activateShipsToPlaceButtons(boardElem, player) {
   DOM().destroyerBtn.addEventListener('click', (e) => {
     resetButtons();
     e.target.textContent = 'Placing...';
-    DOM().removeShipBtn.setAttribute('disabled', '');
     neutralizeShipPlacementListeners();
     renderRotateShip(getCurrentShipOrientation());
     activateShipGhostListeners(2);
@@ -262,21 +289,12 @@ function activateShipsToPlaceButtons(boardElem, player) {
 }
 
 export default function placeShipsManually() {
+  // Set up internally
+  gameManager.newGameVsAI();
   const { player1 } = gameManager.getCurrentGame();
 
-  DOM().randomMenu.after(shipsToPlace);
+  // Set up DOM
+  DOM().main.replaceChildren(DOM().manualPlacementMenuTemplate.content);
+  renderManualPlacementBoard(gameManager.getCurrentGame());
   activateShipsToPlaceButtons(DOM().primaryBoard1, player1);
-
-  // Add remove ship button
-  const removeShipBtn = document.createElement('button');
-  removeShipBtn.classList.add('remove-ship-btn');
-  removeShipBtn.textContent = 'Remove a ship';
-  removeShipBtn.addEventListener('click', (e) => {
-    activateRemoveShipListeners(DOM().primaryBoard1, player1);
-    e.target.textContent = 'Click on a ship to remove it...';
-  });
-  DOM().randomMenu.after(removeShipBtn);
-
-  DOM().randomMenu.remove();
-  DOM().placeShipsManuallyBtn.remove();
 }

@@ -24,6 +24,9 @@ export function DOM() {
     randomPlacementMenuTemplate: document.querySelector(
       '.random-placement-menu',
     ),
+    manualPlacementMenuTemplate: document.querySelector(
+      '.manual-placement-menu',
+    ),
 
     /* == Buttons == */
     placeShipsRandomlyBtn: document.querySelector('.place-ships-randomly-btn'),

@@ -51,7 +51,6 @@ body {
       cursor: pointer;
     }
 
-    &.ghost,
     &.miss {
       background-color: #5d89ba;
     }
@@ -60,7 +59,8 @@ body {
       /* background-color: #e25822; */
     }
 
-    &.ship-present {
+    &.ship-present,
+    &.ghost {
       background-color: #95dc56;
       border-radius: 10px;
     }
@@ -137,5 +137,10 @@ button:not(.boards *) {
   &:focus-visible {
     cursor: pointer;
     color: var(--background-color);
+  }
+
+  &[disabled] {
+    background-color: ghostwhite;
+    color: var(--main-color);
   }
 }
