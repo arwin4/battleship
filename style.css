@@ -55,10 +55,6 @@ body {
       background-color: #5d89ba;
     }
 
-    &.ghost.ship-present {
-      /* background-color: #e25822; */
-    }
-
     &.ship-present,
     &.ghost {
       background-color: #95dc56;
