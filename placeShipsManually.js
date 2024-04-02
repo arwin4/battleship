@@ -1,4 +1,4 @@
-import DOM from './dom/elementGetters.js';
+import DOM from './utils/elementGetters.js';
 import startGame from './dom/startGame.js';
 import gameManager from './gameManager.js';
 import {
