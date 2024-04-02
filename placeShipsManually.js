@@ -151,19 +151,19 @@ function activateShipsToPlaceButtons(boardElem, player) {
     DOM().removeShipBtn?.remove();
 
     if (!DOM().carrierBtn.disabled)
-      DOM().carrierBtn.textContent = 'Carrier - Length 5';
+      DOM().carrierBtn.textContent = 'Carrier ▪️▪️▪️▪️▪️';
 
     if (!DOM().battleshipBtn.disabled)
-      DOM().battleshipBtn.textContent = 'Battleship - Length 4';
+      DOM().battleshipBtn.textContent = 'Battleship ▪️▪️▪️▪️';
 
     if (!DOM().cruiserBtn.disabled)
-      DOM().cruiserBtn.textContent = 'Cruiser - Length 3';
+      DOM().cruiserBtn.textContent = 'Cruiser ▪️▪️▪️';
 
     if (!DOM().submarineBtn.disabled)
-      DOM().submarineBtn.textContent = 'Submarine - Length 3';
+      DOM().submarineBtn.textContent = 'Submarine ▪️▪️▪️';
 
     if (!DOM().destroyerBtn.disabled)
-      DOM().destroyerBtn.textContent = 'Destroyer - Length 2';
+      DOM().destroyerBtn.textContent = 'Destroyer ▪️▪️▪️';
   }
 
   let carrierPlacementController = null;
