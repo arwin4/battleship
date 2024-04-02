@@ -91,11 +91,9 @@ export function renderTrackingBoard(board, player) {
 function renderOrientationText(orientationText) {
   const currentOrientationText = orientationText;
   if (currentShipOrientation === 'vertical') {
-    currentOrientationText.textContent =
-      'Currently placing the ship vertically from the cell of your choosing...';
+    currentOrientationText.textContent = 'Placing vertically...';
   } else {
-    currentOrientationText.textContent =
-      'Currently placing the ship horizontally from the cell of your choosing...';
+    currentOrientationText.textContent = 'Placing horizontally...';
   }
 }
 
