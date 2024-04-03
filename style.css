@@ -15,13 +15,37 @@
   font-family: 'ReadEx-Pro', Arial;
 }
 
+menu {
+  padding-inline-start: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   background-color: var(--background-color);
   color: var(--main-color);
 }
 
-.placement-btn::first-letter {
-  text-transform: capitalize;
+h1 {
+  text-align: center;
+  margin: 10px 0;
+  margin-bottom: 20px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boards {
+  display: flex;
 }
 
 .boards > * {
@@ -83,9 +107,31 @@ body {
   }
 }
 
-.ships-to-place-list {
-  display: grid;
-  row-gap: 10px;
+.placement {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  .remove-ship-btn,
+  .play-btn {
+    margin-top: 20px;
+    max-width: 200px;
+    align-self: center;
+  }
+
+  .placement-btn::first-letter {
+    text-transform: capitalize;
+  }
+
+  .ships-to-place-list {
+    display: grid;
+    row-gap: 10px;
+    justify-items: center;
+
+    button {
+      width: 250px;
+    }
+  }
 }
 
 .hidden {

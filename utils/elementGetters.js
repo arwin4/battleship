@@ -18,6 +18,7 @@ export default function DOM() {
     placement: document.querySelector('.placement'),
     orientation: document.querySelector('.orientation'),
     main: document.querySelector('main'),
+    title: document.querySelector('h1'),
 
     /* === Buttons === */
     placeShipsRandomlyBtn: document.querySelector('.place-ships-randomly-btn'),

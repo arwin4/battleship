@@ -57,7 +57,7 @@ function showPlayButtonWhenBoardIsFull() {
     playBtn.classList.add('play-btn');
     playBtn.textContent = 'Play!';
     playBtn.addEventListener('click', () => startGame());
-    DOM().boards.after(playBtn);
+    DOM().placement.prepend(playBtn);
   }
 }
 
@@ -103,7 +103,7 @@ function showRemoveShipButton(player) {
     e.target.textContent = 'Click on a ship to remove it...';
     e.target.setAttribute('disabled', '');
   });
-  DOM().boards.after(removeShipBtn);
+  DOM().placement.prepend(removeShipBtn);
 }
 
 function renderShipPlacement(e, type, player) {

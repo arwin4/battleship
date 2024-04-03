@@ -26,10 +26,12 @@ export default function startGame() {
   }
 
   // Remove setup elements
+  DOM().title?.remove();
   DOM().placeShipsRandomlyBtn?.remove();
   DOM().playBtn?.remove();
   DOM().resetBoardBtn?.remove();
   DOM().placement?.remove();
+  DOM().randomMenu?.remove();
   DOM().removeShipBtn?.remove();
 
   // Create and populate tracking board
