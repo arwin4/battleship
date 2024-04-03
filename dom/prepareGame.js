@@ -35,6 +35,7 @@ function handlePlaceShipsRandomly() {
     gameManager.newGameVsAI();
     gameManager.getCurrentGame().player1.placeAllShipsRandomly();
     renderRandomPlacementBoard(gameManager.getCurrentGame());
+    DOM().boards.classList.add('reroll');
   });
   DOM().playBtn.addEventListener('click', () => startGame());
 }

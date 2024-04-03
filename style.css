@@ -112,8 +112,11 @@ main {
     gap: 50px;
   }
 
-  .player-1-primary {
-    animation: ease-in-out 1s slidein;
+  /* Show flip animation on board reroll */
+  &:has(.reroll) {
+    .player-1-primary {
+      animation: ease 0.5s flip;
+    }
   }
 
   .placement {
@@ -188,6 +191,13 @@ button:not(.boards *) {
   }
   to {
     transform: translateY(0);
+  }
+}
+
+@keyframes flip {
+  from {
+    transform: rotateY(180deg);
+    opacity: 0;
   }
 }
 
