@@ -27,6 +27,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  margin: 0 0;
+  height: 100dvh;
 
   background-color: var(--background-color);
   color: var(--main-color);
@@ -60,10 +63,6 @@ main {
   border-radius: 2%;
 
   background-color: var(--main-color);
-
-  &.player-1-primary {
-    animation: ease-in-out 1s slidein;
-  }
 
   button {
     background-color: ghostwhite;
@@ -107,60 +106,52 @@ main {
   }
 }
 
-.placement {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-
-  .remove-ship-btn,
-  .play-btn {
-    margin-top: 20px;
-    max-width: 200px;
-    align-self: center;
+.prepare-game {
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 50px;
   }
 
-  .placement-btn::first-letter {
-    text-transform: capitalize;
+  .player-1-primary {
+    animation: ease-in-out 1s slidein;
   }
 
-  .ships-to-place-list {
-    display: grid;
-    row-gap: 10px;
-    justify-items: center;
+  .placement {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
 
-    button {
-      width: 250px;
+    .remove-ship-btn,
+    .play-btn {
+      margin-top: 20px;
+      max-width: 200px;
+      align-self: center;
     }
+
+    .placement-btn::first-letter {
+      text-transform: capitalize;
+    }
+
+    .ships-to-place-list {
+      display: grid;
+      row-gap: 10px;
+      justify-items: center;
+
+      button {
+        width: 250px;
+      }
+    }
+  }
+}
+
+.ongoing-game {
+  .boards {
+    gap: 50px;
   }
 }
 
 .hidden {
   display: none;
-}
-
-@keyframes slidein {
-  from {
-    transform: translateY(10px);
-    opacity: 0.5;
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes error-shake {
-  25% {
-    transform: translateX(5px);
-  }
-  50% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-  100% {
-    transform: translateX(0);
-  }
 }
 
 button:not(.boards *) {
@@ -185,5 +176,32 @@ button:not(.boards *) {
     background-color: ghostwhite;
     color: var(--main-color);
     cursor: not-allowed;
+  }
+}
+
+/* == Animations == */
+
+@keyframes slidein {
+  from {
+    transform: translateY(10px);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes error-shake {
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
   }
 }

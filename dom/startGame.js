@@ -34,6 +34,9 @@ export default function startGame() {
   DOM().randomMenu?.remove();
   DOM().removeShipBtn?.remove();
 
+  DOM().main.classList.remove('prepare-game');
+  DOM().main.classList.add('ongoing-game');
+
   // Create and populate tracking board
   const trackingBoard1 = document.createElement('div');
   trackingBoard1.classList.add('player-1-tracking');
