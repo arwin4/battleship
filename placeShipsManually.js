@@ -27,7 +27,7 @@ function renderManualPlacementBoard(currentGame) {
       DOM().primaryBoard1.appendChild(cell);
 
       if (boardCells[i][j].shipPresent)
-        updateCellStyle(DOM().primaryBoard1.className, i, j, 'ship-present');
+        updateCellStyle(DOM().primaryBoard1.classList[1], i, j, 'ship-present');
     }
   }
 }

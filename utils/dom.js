@@ -21,19 +21,19 @@ export function getCellInfo(e) {
   const row = Number.parseFloat(e.target.getAttribute('row-number'));
   const column = Number.parseFloat(e.target.getAttribute('column-number'));
   const boardElem = e.target.parentElement;
-  const boardClassName = e.target.parentElement.className;
+  const boardClassName = e.target.parentElement.classList[1];
 
   const opponentBoardClassName =
-    boardClassName === 'player-1-tracking'
-      ? 'player-2-primary'
-      : 'player-1-primary';
+    boardClassName === 'board player-1-tracking'
+      ? 'board player-2-primary'
+      : 'board player-1-primary';
 
   return { row, column, boardElem, boardClassName, opponentBoardClassName };
 }
 
 export function updateCellStyle(boardClassName, row, column, style) {
   const cellToUpdate = document.querySelector(
-    `.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
+    `.board.${boardClassName} > [row-number="${row}"][column-number="${column}"]`,
   );
 
   cellToUpdate.className = style;
@@ -50,16 +50,16 @@ export function renderPrimaryBoard(board, player) {
       board.appendChild(cell);
 
       if (boardCells[i][j].shipPresent && !boardCells[i][j].wasAttacked) {
-        updateCellStyle(board.className, i, j, 'ship-present');
+        updateCellStyle(board.classList[1], i, j, 'ship-present');
       } else if (boardCells[i][j].wasAttacked && !boardCells[i][j].attackHit) {
-        updateCellStyle(board.className, i, j, 'miss');
+        updateCellStyle(board.classList[1], i, j, 'miss');
       } else if (
         boardCells[i][j].attackHit &&
         !boardCells[i][j].shipID?.isSunk()
       ) {
-        updateCellStyle(board.className, i, j, 'hit');
+        updateCellStyle(board.classList[1], i, j, 'hit');
       } else if (boardCells[i][j].shipID?.isSunk()) {
-        updateCellStyle(board.className, i, j, 'sunk');
+        updateCellStyle(board.classList[1], i, j, 'sunk');
       }
     }
   }
@@ -76,14 +76,14 @@ export function renderTrackingBoard(board, player) {
       boardCells[row][column].wasAttacked &&
       !boardCells[row][column].attackHit
     ) {
-      updateCellStyle(board.className, row, column, 'miss');
+      updateCellStyle(board.classList[1], row, column, 'miss');
     } else if (
       boardCells[row][column].attackHit &&
       !boardCells[row][column].shipID?.isSunk()
     ) {
-      updateCellStyle(board.className, row, column, 'hit');
+      updateCellStyle(board.classList[1], row, column, 'hit');
     } else if (boardCells[row][column].shipID?.isSunk()) {
-      updateCellStyle(board.className, row, column, 'sunk');
+      updateCellStyle(board.classList[1], row, column, 'sunk');
     }
   });
 }

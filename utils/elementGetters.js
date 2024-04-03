@@ -1,8 +1,8 @@
 export default function DOM() {
   return {
     /* == Boards == */
-    primaryBoard1: document.querySelector('.player-1-primary'),
-    trackingBoard1: document.querySelector('.player-1-tracking'),
+    primaryBoard1: document.querySelectorAll('.board.player-1-primary')[0],
+    trackingBoard1: document.querySelectorAll('.board.player-1-tracking')[0],
     boards: document.querySelector('.boards'),
 
     /* == Templates == */

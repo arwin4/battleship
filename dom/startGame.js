@@ -39,6 +39,7 @@ export default function startGame() {
 
   // Create and populate tracking board
   const trackingBoard1 = document.createElement('div');
+  trackingBoard1.classList.add('board');
   trackingBoard1.classList.add('player-1-tracking');
   DOM().primaryBoard1.after(trackingBoard1);
 

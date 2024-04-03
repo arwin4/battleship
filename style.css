@@ -51,7 +51,7 @@ main {
   display: flex;
 }
 
-.boards > * {
+.board {
   width: 300px;
   height: 300px;
 
@@ -157,7 +157,7 @@ main {
   display: none;
 }
 
-button:not(.boards *) {
+button:not(.board *) {
   border: none;
 
   padding: 5px;
