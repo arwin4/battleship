@@ -216,7 +216,7 @@ main {
   /* == Finished game == */
 
   .board.lose {
-    animation: 2s forwards board-pop;
+    animation: 2s forwards board-finish;
   }
 
   .board.lose,
