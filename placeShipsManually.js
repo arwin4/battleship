@@ -73,37 +73,18 @@ function activateRemoveShipListeners(board, player) {
         DOM()[`${type}Btn`].removeAttribute('disabled');
         DOM()[`${type}Btn`].textContent = getShipPlacementButtonText(type);
 
-        // Reset ship remove btn
-        DOM().removeShipBtn.textContent = 'Remove a ship';
-        DOM().removeShipBtn.removeAttribute('disabled');
-
         player.board.removeShip(row, column);
         renderPrimaryBoard(board, player);
 
-        // Render conditional buttons
+        // Render play button
         if (gameManager.getCurrentGame().player1.board.getShips().length < 5) {
           DOM().playBtn?.remove();
         }
-        if (
-          gameManager.getCurrentGame().player1.board.getShips().length === 0
-        ) {
-          DOM().removeShipBtn.remove();
-        }
+
+        activateRemoveShipListeners(board, player);
       });
     }
   });
-}
-
-function showRemoveShipButton(player) {
-  const removeShipBtn = document.createElement('button');
-  removeShipBtn.classList.add('remove-ship-btn');
-  removeShipBtn.textContent = 'Remove a ship';
-  removeShipBtn.addEventListener('click', (e) => {
-    activateRemoveShipListeners(DOM().primaryBoard1, player);
-    e.target.textContent = 'Click on a ship to remove it...';
-    e.target.setAttribute('disabled', '');
-  });
-  DOM().placement.prepend(removeShipBtn);
 }
 
 function renderShipPlacement(e, type, player) {
@@ -125,9 +106,9 @@ function renderShipPlacement(e, type, player) {
   DOM()[`${type}Btn`].setAttribute('disabled', '');
   DOM().orientation.replaceChildren();
   showPlayButtonWhenBoardIsFull();
-  if (!DOM().removeShipBtn) showRemoveShipButton(player);
   deactivateShipRotation();
   getShipRotationHotkeyController().abort();
+  activateRemoveShipListeners(DOM().primaryBoard1, player);
 }
 
 function listenForShipPlacement(player, boardElem, type) {
@@ -148,8 +129,6 @@ function listenForShipPlacement(player, boardElem, type) {
 
 function activateShipsToPlaceButtons(boardElem, player) {
   function resetButtons() {
-    DOM().removeShipBtn?.remove();
-
     if (!DOM().carrierBtn.disabled)
       DOM().carrierBtn.textContent = getShipPlacementButtonText('carrier');
 
