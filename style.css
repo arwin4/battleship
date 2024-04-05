@@ -47,10 +47,6 @@ main {
   align-items: center;
 }
 
-.boards {
-  display: flex;
-}
-
 .board {
   width: 300px;
   height: 300px;
@@ -148,13 +144,52 @@ main {
 }
 
 .ongoing-game {
-  .boards {
-    gap: 50px;
-  }
-}
+  display: grid;
+  grid-template-areas:
+    'player-board-header'
+    'player-1-primary'
+    'tracking-board-header'
+    'player-1-tracking';
 
-.hidden {
-  display: none;
+  gap: 10px;
+  column-gap: 50px;
+  justify-items: center;
+
+  .player-1-primary {
+    width: 180px;
+    height: 180px;
+  }
+
+  .player-board-header {
+    grid-area: player-board-header;
+  }
+
+  .tracking-board-header {
+    grid-area: tracking-board-header;
+  }
+
+  .player-1-primary {
+    grid-area: player-1-primary;
+  }
+
+  .player-1-tracking {
+    grid-area: player-1-tracking;
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    grid-template-areas:
+      'player-board-header tracking-board-header'
+      'player-1-primary player-1-tracking';
+
+    .player-1-primary {
+      width: 250px;
+      height: 250px;
+    }
+  }
 }
 
 button:not(.board *) {

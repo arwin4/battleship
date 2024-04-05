@@ -25,24 +25,23 @@ export default function startGame() {
     }, 500);
   }
 
-  // Remove setup elements
-  DOM().title?.remove();
-  DOM().placeShipsRandomlyBtn?.remove();
-  DOM().playBtn?.remove();
-  DOM().resetBoardBtn?.remove();
-  DOM().placement?.remove();
-  DOM().randomMenu?.remove();
-  DOM().removeShipBtn?.remove();
+  DOM().title.remove();
+  DOM().main.replaceChildren();
 
   DOM().main.classList.remove('prepare-game');
   DOM().main.classList.add('ongoing-game');
+
+  // Render primary board
+  const primaryBoard1 = document.createElement('div');
+  primaryBoard1.classList.add('board');
+  primaryBoard1.classList.add('player-1-primary');
+  DOM().main.prepend(primaryBoard1);
+  renderPrimaryBoard(primaryBoard1, player1);
 
   // Create and populate tracking board
   const trackingBoard1 = document.createElement('div');
   trackingBoard1.classList.add('board');
   trackingBoard1.classList.add('player-1-tracking');
-  DOM().primaryBoard1.after(trackingBoard1);
-
   for (let i = 0; i < 10; i += 1) {
     for (let j = 0; j < 10; j += 1) {
       const cell = document.createElement('button');
@@ -55,4 +54,15 @@ export default function startGame() {
   trackingBoard1.childNodes.forEach((cell) => {
     cell.addEventListener('click', (e) => handleAttackClick(e));
   });
+  DOM().main.prepend(trackingBoard1);
+
+  // Add board headers
+  const primaryBoardHeader = document.createElement('h3');
+  primaryBoardHeader.classList.add('player-board-header');
+  primaryBoardHeader.textContent = 'Your board';
+  DOM().main.prepend(primaryBoardHeader);
+  const trackingBoardHeader = document.createElement('h3');
+  trackingBoardHeader.classList.add('tracking-board-header');
+  trackingBoardHeader.textContent = '⬇ Attack here ⬇';
+  DOM().main.prepend(trackingBoardHeader);
 }
