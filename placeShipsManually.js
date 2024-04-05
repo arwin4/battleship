@@ -58,6 +58,7 @@ function showPlayButtonWhenBoardIsFull() {
     playBtn.textContent = 'Play!';
     playBtn.addEventListener('click', () => startGame());
     DOM().placement.prepend(playBtn);
+    DOM().placementInstructions.remove();
   }
 }
 
@@ -109,6 +110,7 @@ function renderShipPlacement(e, type, player) {
   deactivateShipRotation();
   getShipRotationHotkeyController().abort();
   activateRemoveShipListeners(DOM().primaryBoard1, player);
+  DOM().placementInstructions?.classList.remove('hidden');
 }
 
 function listenForShipPlacement(player, boardElem, type) {

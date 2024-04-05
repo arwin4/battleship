@@ -14,6 +14,7 @@ export default function DOM() {
 
     /* == Misc. elements == */
     randomMenu: document.querySelector('.random-menu'),
+    placementInstructions: document.querySelector('.placement .instructions'),
     placement: document.querySelector('.placement'),
     orientation: document.querySelector('.orientation'),
     main: document.querySelector('main'),

@@ -111,9 +111,9 @@ main {
 }
 
 .prepare-game {
-  @media (min-width: 768px) {
-    flex-direction: row;
-    gap: 50px;
+  h4 {
+    margin: 10px 0;
+    max-width: 250px;
   }
 
   /* Show flip animation on board reroll */
@@ -147,13 +147,20 @@ main {
 
     .ships-to-place-list {
       display: grid;
-      row-gap: 10px;
       justify-items: center;
+      row-gap: 10px;
+      padding: 10px 0;
 
       button {
         width: 250px;
       }
     }
+  }
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    gap: 50px;
+    height: 350px;
   }
 }
 
@@ -273,6 +280,10 @@ button:not(.board *) {
     color: var(--main-color);
     cursor: not-allowed;
   }
+}
+
+.hidden {
+  display: none;
 }
 
 /* == Animations == */

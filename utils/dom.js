@@ -1,3 +1,5 @@
+import DOM from './elementGetters.js';
+
 let currentShipOrientation = 'horizontal';
 const toggleCurrentShipOrientation = () => {
   currentShipOrientation =
@@ -147,6 +149,7 @@ function rotateShipOnHotkey(orientationText, length) {
 
 export function renderRotateShip(length) {
   activateShipRotation();
+  DOM().placementInstructions.classList.add('hidden');
 
   const orientationContainer = document.querySelector('.orientation');
   orientationContainer.replaceChildren();
