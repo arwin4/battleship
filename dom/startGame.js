@@ -5,6 +5,7 @@ import {
   renderTrackingBoard,
 } from '../utils/dom.js';
 import DOM from '../utils/elementGetters.js';
+import endGame from './endGame.js';
 
 export default function startGame() {
   const currentGame = gameManager.getCurrentGame();
@@ -15,9 +16,9 @@ export default function startGame() {
     const { row, column } = cellInfo;
 
     // Handle the attack and update the cell style on the appropriate boards
-    const attack = currentGame.handleAttack(player1, row, column);
-    // TODO: Check if following line is necessary
-    if (!attack) return;
+    currentGame.handleAttack(player1, row, column);
+
+    if (gameManager.getCurrentGame().isGameOver()) endGame();
 
     renderTrackingBoard(DOM().trackingBoard1, player2);
     setTimeout(() => {

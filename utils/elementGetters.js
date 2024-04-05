@@ -19,6 +19,7 @@ export default function DOM() {
     orientation: document.querySelector('.orientation'),
     main: document.querySelector('main'),
     title: document.querySelector('h1'),
+    gameEndDialog: document.querySelector('.game-end-dialog'),
 
     /* === Buttons === */
     placeShipsRandomlyBtn: document.querySelector('.place-ships-randomly-btn'),
