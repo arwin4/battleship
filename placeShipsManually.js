@@ -58,7 +58,7 @@ function showPlayButtonWhenBoardIsFull() {
     playBtn.textContent = 'Play!';
     playBtn.addEventListener('click', () => startGame());
     DOM().placement.prepend(playBtn);
-    DOM().placementInstructions.remove();
+    DOM().placementInstructions.classList.add('hidden');
   }
 }
 
