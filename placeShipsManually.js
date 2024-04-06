@@ -47,6 +47,7 @@ function activateShipGhostListeners(length) {
   DOM().primaryBoard1.childNodes.forEach((cell) => {
     cell.addEventListener('mouseover', (e) => showGhosts(e, length));
     cell.addEventListener('click', (e) => showInvalidGhosts(e));
+    cell.addEventListener('touchend', () => hideGhosts());
     cell.addEventListener('mouseout', () => hideGhosts());
   });
 }
