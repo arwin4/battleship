@@ -114,22 +114,16 @@ function renderShipPlacement(e, type, player) {
 }
 
 function listenForShipPlacement(player, boardElem, type) {
-  const shipPlacementController = new AbortController();
-
   boardElem.childNodes.forEach((cell) => {
     if (cell.className !== 'ship-present') {
-      cell.addEventListener(
-        'click',
-        (e) => renderShipPlacement(e, type, player),
-        { signal: shipPlacementController.signal },
+      cell.addEventListener('click', (e) =>
+        renderShipPlacement(e, type, player),
       );
     } else {
       // Remove remove ship listeners
       cell.replaceWith(cell.cloneNode(true));
     }
   });
-
-  return shipPlacementController;
 }
 
 function activateShipsToPlaceButtons(boardElem, player) {
@@ -151,87 +145,36 @@ function activateShipsToPlaceButtons(boardElem, player) {
       DOM().destroyerBtn.textContent = getShipPlacementButtonText('destroyer');
   }
 
-  let carrierPlacementController = null;
-  let battleshipPlacementController = null;
-  let cruiserPlacementController = null;
-  let submarinePlacementController = null;
-  let destroyerPlacementController = null;
-
-  /**
-   * Deactivate cell listeners, allowing a new event listener to be attached, in
-   * order to allow a different ship to be placed instead.
-   */
-  function neutralizeShipPlacementListeners() {
-    if (battleshipPlacementController) battleshipPlacementController.abort();
-    if (carrierPlacementController) carrierPlacementController.abort();
-    if (cruiserPlacementController) cruiserPlacementController.abort();
-    if (submarinePlacementController) submarinePlacementController.abort();
-    if (destroyerPlacementController) destroyerPlacementController.abort();
-
-    // Reset controllers to null so they may be created again.
-    battleshipPlacementController = null;
-    carrierPlacementController = null;
-    cruiserPlacementController = null;
-    submarinePlacementController = null;
-    destroyerPlacementController = null;
-  }
-
   function prepareForPlacement(e, length) {
     resetButtons();
     e.target.textContent = 'Placing...';
-    neutralizeShipPlacementListeners();
     renderRotateShip(length);
     activateShipGhostListeners(length);
   }
 
   DOM().carrierBtn.addEventListener('click', (e) => {
     prepareForPlacement(e, 5);
-
-    carrierPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'carrier',
-    );
+    listenForShipPlacement(player, boardElem, 'carrier');
   });
 
   DOM().battleshipBtn.addEventListener('click', (e) => {
     prepareForPlacement(e, 4);
-
-    battleshipPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'battleship',
-    );
+    listenForShipPlacement(player, boardElem, 'battleship');
   });
 
   DOM().cruiserBtn.addEventListener('click', (e) => {
     prepareForPlacement(e, 3);
-
-    cruiserPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'cruiser',
-    );
+    listenForShipPlacement(player, boardElem, 'cruiser');
   });
 
   DOM().submarineBtn.addEventListener('click', (e) => {
     prepareForPlacement(e, 3);
-
-    submarinePlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'submarine',
-    );
+    listenForShipPlacement(player, boardElem, 'submarine');
   });
 
   DOM().destroyerBtn.addEventListener('click', (e) => {
     prepareForPlacement(e, 2);
-
-    destroyerPlacementController = listenForShipPlacement(
-      player,
-      boardElem,
-      'destroyer',
-    );
+    listenForShipPlacement(player, boardElem, 'destroyer');
   });
 }
 
