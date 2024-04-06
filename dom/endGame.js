@@ -1,9 +1,10 @@
 import gameManager from '../gameManager.js';
+import { renderPrimaryBoard } from '../utils/dom.js';
 import DOM from '../utils/elementGetters.js';
 
 export default function endGame() {
   const currentGame = gameManager.getCurrentGame();
-  const { player1 } = currentGame;
+  const { player1, player2 } = currentGame;
 
   const gameEndDialog = document.createElement('div');
   gameEndDialog.classList.add('game-end-dialog');
@@ -32,5 +33,8 @@ export default function endGame() {
     DOM().trackingBoard1.classList.add('win');
     DOM().primaryBoard1.classList.add('lose');
     scoreAnnouncement.textContent = 'You lose!';
+
+    // Reveal the enemy ships
+    renderPrimaryBoard(DOM().trackingBoard1, player2);
   }
 }
