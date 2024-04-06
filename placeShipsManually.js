@@ -127,7 +127,7 @@ function listenForShipPlacement(player, boardElem, type) {
 }
 
 function activateShipsToPlaceButtons(boardElem, player) {
-  function resetButtons() {
+  function resetShipButtons() {
     if (!DOM().carrierBtn.disabled)
       DOM().carrierBtn.textContent = getShipPlacementButtonText('carrier');
 
@@ -146,7 +146,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
   }
 
   function prepareForPlacement(e, length) {
-    resetButtons();
+    resetShipButtons();
     e.target.textContent = 'Placing...';
     renderRotateShip(length);
     activateShipGhostListeners(length);
