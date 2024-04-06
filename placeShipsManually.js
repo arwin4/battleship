@@ -123,6 +123,9 @@ function listenForShipPlacement(player, boardElem, type) {
         (e) => renderShipPlacement(e, type, player),
         { signal: shipPlacementController.signal },
       );
+    } else {
+      // Remove remove ship listeners
+      cell.replaceWith(cell.cloneNode(true));
     }
   });
 
