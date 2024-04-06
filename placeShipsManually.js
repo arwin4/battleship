@@ -176,12 +176,16 @@ function activateShipsToPlaceButtons(boardElem, player) {
     destroyerPlacementController = null;
   }
 
-  DOM().carrierBtn.addEventListener('click', (e) => {
+  function prepareForPlacement(e, length) {
     resetButtons();
     e.target.textContent = 'Placing...';
     neutralizeShipPlacementListeners();
-    renderRotateShip(5);
-    activateShipGhostListeners(5);
+    renderRotateShip(length);
+    activateShipGhostListeners(length);
+  }
+
+  DOM().carrierBtn.addEventListener('click', (e) => {
+    prepareForPlacement(e, 5);
 
     carrierPlacementController = listenForShipPlacement(
       player,
@@ -191,11 +195,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 
   DOM().battleshipBtn.addEventListener('click', (e) => {
-    resetButtons();
-    e.target.textContent = 'Placing...';
-    neutralizeShipPlacementListeners();
-    renderRotateShip(4);
-    activateShipGhostListeners(4);
+    prepareForPlacement(e, 4);
 
     battleshipPlacementController = listenForShipPlacement(
       player,
@@ -205,11 +205,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 
   DOM().cruiserBtn.addEventListener('click', (e) => {
-    resetButtons();
-    e.target.textContent = 'Placing...';
-    neutralizeShipPlacementListeners();
-    renderRotateShip(3);
-    activateShipGhostListeners(3);
+    prepareForPlacement(e, 3);
 
     cruiserPlacementController = listenForShipPlacement(
       player,
@@ -219,11 +215,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 
   DOM().submarineBtn.addEventListener('click', (e) => {
-    resetButtons();
-    e.target.textContent = 'Placing...';
-    neutralizeShipPlacementListeners();
-    renderRotateShip(3);
-    activateShipGhostListeners(3);
+    prepareForPlacement(e, 3);
 
     submarinePlacementController = listenForShipPlacement(
       player,
@@ -233,11 +225,7 @@ function activateShipsToPlaceButtons(boardElem, player) {
   });
 
   DOM().destroyerBtn.addEventListener('click', (e) => {
-    resetButtons();
-    e.target.textContent = 'Placing...';
-    neutralizeShipPlacementListeners();
-    renderRotateShip(2);
-    activateShipGhostListeners(2);
+    prepareForPlacement(e, 2);
 
     destroyerPlacementController = listenForShipPlacement(
       player,
