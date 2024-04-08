@@ -125,7 +125,7 @@ main {
 
   /* Show pointer for removing ships on manual placement screen */
   .board {
-    &:has(~ .placement) .ship-present {
+    &:has(~ .placement) .ship-present:not(.pointer-disabled) {
       cursor: pointer;
     }
   }
