@@ -160,9 +160,11 @@ function activateShipsToPlaceButtons(boardElem, player) {
      * Disable pointer cursor over placed ships since they're not interactable
      * during placement
      */
-    DOM().primaryBoard1.childNodes.forEach((cell) =>
-      cell.classList.add('pointer-disabled'),
-    );
+    DOM().primaryBoard1.childNodes.forEach((cell) => {
+      const cellWithoutEventListeners = cell.cloneNode(true);
+      cellWithoutEventListeners.classList.add('pointer-disabled');
+      cell.replaceWith(cellWithoutEventListeners);
+    });
 
     activateShipGhostListeners(length);
   }
