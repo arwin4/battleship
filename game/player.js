@@ -1,5 +1,5 @@
 import Gameboard from './gameboard.js';
-import shuffleArray from './utils/shuffleArray.js';
+import shuffleArray from '../utils/shuffleArray.js';
 
 const Player = () => {
   // Make player human by default. Allow this state to be changed.

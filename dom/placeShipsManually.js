@@ -1,6 +1,6 @@
-import DOM from './utils/elementGetters.js';
-import startGame from './dom/startGame.js';
-import gameManager from './gameManager.js';
+import DOM from '../utils/elementGetters.js';
+import startGame from './startGame.js';
+import gameManager from '../gameManager.js';
 import {
   getCellInfo,
   renderRotateShip,
@@ -13,7 +13,7 @@ import {
   getCurrentShipOrientation,
   getShipRotationHotkeyController,
   getShipPlacementButtonText,
-} from './utils/dom.js';
+} from '../utils/dom.js';
 
 function renderManualPlacementBoard(currentGame) {
   DOM().primaryBoard1.replaceChildren();

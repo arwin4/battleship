@@ -1,7 +1,7 @@
 import gameManager from '../gameManager.js';
 import DOM from '../utils/elementGetters.js';
 import { updateCellStyle } from '../utils/dom.js';
-import placeShipsManually from '../placeShipsManually.js';
+import placeShipsManually from './placeShipsManually.js';
 import startGame from './startGame.js';
 
 function renderRandomPlacementBoard(currentGame) {
