@@ -189,7 +189,7 @@ export function getShipPlacementButtonText(type) {
 
   let visualLength = '';
   for (let i = length; i > 0; i -= 1) {
-    visualLength += '▪️';
+    visualLength += '▢';
   }
 
   return `${type} ${visualLength}`;
