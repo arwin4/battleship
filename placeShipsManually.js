@@ -121,7 +121,7 @@ function renderShipPlacement(e, type, player) {
 
 function listenForShipPlacement(player, boardElem, type) {
   boardElem.childNodes.forEach((cell) => {
-    if (cell.className !== 'ship-present') {
+    if (!Array.from(cell.classList).includes('ship-present')) {
       cell.addEventListener('click', (e) =>
         renderShipPlacement(e, type, player),
       );

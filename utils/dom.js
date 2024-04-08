@@ -23,11 +23,6 @@ export function getCellInfo(e) {
   const row = Number.parseFloat(e.target.getAttribute('row-number'));
   const column = Number.parseFloat(e.target.getAttribute('column-number'));
 
-  /**
-   * FIXME: In some cases, the parentElement is null even though the e.target is
-   * known and appears to be valid. Steps to reproduce are unknown.
-   */
-
   const boardElem = e.target.parentElement;
   const boardClassName = e.target.parentElement.classList[1];
 
