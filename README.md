@@ -1,5 +1,7 @@
 # Battleship (TDD)
 
+![Ongoing game of battleship](screenshot.png)
+
 This is an implementation of [The Odin Project's plain JS _Battleship_
 project](https://www.theodinproject.com/lessons/node-path-javascript-battleship).
 
