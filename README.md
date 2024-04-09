@@ -22,3 +22,7 @@ the DOM is decoupled from the internal game).
 
 - The ship rotation hotkey doesn't work if a second ship placement button is
   pressed before placing a ship.
+
+### Credits
+
+- Favicon: [game-icons](https://github.com/game-icons/icons) | Creative Commons 3.0 BY
